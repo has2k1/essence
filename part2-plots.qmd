@@ -1,0 +1,88 @@
+---
+title: "Part 2 — Plots with plotnine"
+pyodide:
+  packages:
+    - plotnine==0.16.0a15
+    - pandas
+  resources:
+    - data/gapminder_africa_2007.csv
+execute:
+  echo: true
+  warning: false
+---
+
+plotnine is the grammar of graphics in Python: you build a plot by declaring
+mappings from data to visual properties, then layering on geometric objects.
+
+## 2a. Your first plot
+
+Everything below runs in your browser. Press ▶ Run to execute a cell, and
+edit the code freely — you can't break anything.
+
+```{pyodide}
+#| exercise: first_plot_0
+#| envir: first_plot
+#| autorun: true
+#| edit: false
+import pandas as pd
+from plotnine import *
+
+gapminder = pd.read_csv("data/gapminder_africa_2007.csv")
+gapminder.head()
+```
+
+```{pyodide}
+#| exercise: first_plot_1
+#| envir: first_plot
+#| autorun: true
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point()
+)
+```
+
+One mapping so far: `gdpPercap` → x position, `lifeExp` → y position.
+
+## 2b. Faded example
+
+::: {.callout-tip}
+## Coming soon
+
+Fill in the blanks: add a size mapping for `pop` (population).
+:::
+
+## 2c. Layered composition
+
+::: {.callout-tip}
+## Coming soon
+
+Add layers: a trend line, labels, a log scale.
+:::
+
+## 2d. Parsons problem
+
+::: {.callout-tip}
+## Coming soon
+
+Rearrange the lines of a scrambled plot specification into working order.
+:::
+
+## 2e. Small multiples
+
+::: {.callout-tip}
+## Coming soon
+
+Faceting with the full Gapminder Africa time series.
+:::
+
+## 2f. Discovery: the census data
+
+Now you're ready for the data from Part 1. Load the provisional (bad)
+figures and the corrected (good) figures — and find the error for yourself,
+with a plot.
+
+::: {.callout-tip}
+## Coming soon
+
+Guided discovery exercise on `data/bad/` vs `data/good/`.
+:::

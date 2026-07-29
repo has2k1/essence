@@ -1,0 +1,43 @@
+---
+title: "The Essence of Data Visualisation"
+subtitle: "PyCon Africa 2026"
+---
+
+Every plot and every table you have ever seen is doing the same thing:
+mapping data values to visual properties. A scatter plot maps two columns to
+x and y positions. A colour-coded table maps values to a colour scale. A bar
+chart and a pie chart are the same mapping in different coordinate systems.
+
+Once you see this, you stop memorising chart types and start *reasoning*
+about visualisation. You can look at any graphic — a plot, a table, a
+dashboard — and ask one question: **"what maps to what?"**
+
+In this two-hour, hands-on workshop you will:
+
+- learn the single idea behind all data visualisation,
+- put it into practice with **plotnine** for plots and **great-tables** for
+  tables,
+- and use it to dissect a real case where a table went wrong: the Uganda
+  2024 Census tribal population figures, where a row transposition error
+  triggered a national conversation.
+
+Everything runs in your browser — no installation needed. Every code block
+is editable and runnable.
+
+## Workshop outline
+
+| Part                              | Topic                    | Tools        |
+|-----------------------------------|--------------------------|--------------|
+| [1. The Idea](part1-the-idea.qmd) | What maps to what?       | —            |
+| [2. Plots](part2-plots.qmd)       | The grammar of graphics  | plotnine     |
+| [3. Tables](part3-tables.qmd)     | Tables as visualisations | great-tables |
+| [4. Closing](part4-closing.qmd)   | Design your own          | both         |
+
+## Before you arrive
+
+Nothing to install. If you'd like to follow along on your own machine
+instead of the browser, install the packages:
+
+```bash
+pip install plotnine great-tables pandas
+```

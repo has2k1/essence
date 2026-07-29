@@ -1,0 +1,46 @@
+---
+title: "Part 3 — Tables with great-tables"
+pyodide:
+  packages:
+    - great-tables<=0.21.0
+    - pandas
+  resources:
+    - data/good/census_2024.csv
+execute:
+  echo: true
+  warning: false
+---
+
+A table is a visualisation too. Column position, alignment, number
+formatting, colour, weight — all visual properties, all mappings from data.
+
+## 3a. The census data, as a table
+
+```{pyodide}
+#| exercise: first_table_0
+#| envir: first_table
+#| autorun: true
+#| edit: false
+import pandas as pd
+from great_tables import GT
+
+# Corrected census figures
+census = pd.read_csv("data/good/census_2024.csv")
+census.head()
+```
+
+```{pyodide}
+#| exercise: first_table_1
+#| envir: first_table
+#| autorun: true
+GT(census)
+```
+
+## 3b–3f. Building a publication-quality table
+
+::: {.callout-tip}
+## Coming soon
+
+Number formatting, headers, highlighting the tribes where the provisional
+figures went wrong, and the mappings behind each choice.
+:::

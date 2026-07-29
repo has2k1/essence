@@ -24,4 +24,5 @@ dependencies = [
     "plotnine>=0.16.0a15",
     "great-tables",
     "pandas",
+    "jupyter>=1.1.1",
 ]

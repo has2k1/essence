@@ -1,0 +1,28 @@
+---
+title: "Part 4 — Closing"
+execute:
+  echo: true
+  warning: false
+---
+
+## 4a. What you learned
+
+One idea: **visualisation is a mapping from data values to visual
+properties.** You now have two tools for making those mappings deliberately:
+plotnine for plots, great-tables for tables.
+
+## 4b. Design exercise
+
+::: {.callout-tip}
+## Coming soon
+
+A new small dataset. In pairs: decide the question, choose the mappings,
+build the visualisation — plot or table, your call.
+:::
+
+## 4c. Where to go next
+
+- [plotnine documentation](https://plotnine.org/)
+- [Great Tables documentation](https://posit-dev.github.io/great-tables/)
+- [Gapminder](https://www.gapminder.org/) — the data behind our examples
+- [UBOS](https://www.ubos.org/) — Uganda Bureau of Statistics

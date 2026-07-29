@@ -1,0 +1,30 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - data/
+
+website:
+  title: "The Essence of Data Visualisation: Mapping from Data to Visual Properties"
+  description: "PyCon Africa 2026 workshop — every plot and every table is a mapping from data to visual properties."
+  reader-mode: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+  sidebar:
+    contents:
+      - section: "Workshop"
+        contents:
+          - href: index.qmd
+          - href: part1-the-idea.qmd
+          - href: part2-plots.qmd
+          - href: part3-tables.qmd
+          - href: part4-closing.qmd
+
+format:
+  live-html:
+    theme: theme.scss
+    toc: true
+    toc-location: right
+    code-tools: true
