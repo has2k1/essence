@@ -1,10 +1,13 @@
 # Data
 
-## Census data (`good/`, `bad/`)
+## Census data (`good/`, `bad/`, `census_long.csv`)
 
 Uganda 2024 Census tribal population, as published in the provisional report
 (`bad/`) and the corrected final report (`good/`). See `bad/README.md` for
 details of the swap.
+
+`census_long.csv` combines both into long format —
+`tribe, year, population, version` (60 rows) — for plotting.
 
 Source: [UBOS National Population and Housing Census 2024](https://www.ubos.org/wp-content/uploads/2024/12/National-Population-and-Housing-Census-2024-Final-Report-Volume-1-Main.pdf)
 
