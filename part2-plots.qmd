@@ -6,6 +6,7 @@ pyodide:
     - pandas
   resources:
     - data/gapminder_africa_2007.csv
+    - data/census_long.csv
 execute:
   echo: true
   warning: false
@@ -77,12 +78,248 @@ Faceting with the full Gapminder Africa time series.
 
 ## 2f. Discovery: the census data
 
-Now you're ready for the data from Part 1. Load the provisional (bad)
-figures and the corrected (good) figures — and find the error for yourself,
-with a plot.
+Back to the table from Part 1. Its numbers were wrong, but they didn't
+*look* wrong: they were plausible, well formatted numbers in neat rows.
+Spotting the problem meant reading pairs of numbers and doing arithmetic
+in your head.
 
-::: {.callout-tip}
-## Coming soon
+A plot can do that work for you. Let's see whether one would have caught
+the error.
 
-Guided discovery exercise on `data/bad/` vs `data/good/`.
+### The data
+
+`census_long.csv` holds each tribe's population in the 2014 and 2024
+censuses, in two versions: `bad` (the provisional report) and `good` (the
+corrected final report).
+
+```{pyodide}
+#| exercise: census_0
+#| autorun: true
+#| edit: false
+import pandas as pd
+from plotnine import *
+
+census = pd.read_csv("data/census_long.csv")
+
+# List tribes from smallest to largest (corrected 2024 figures)
+tribe_order = (
+    census.query("version == 'good' and year == 2024")
+    .sort_values("population")
+    .tribe
+)
+census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
+
+# A year is a label here, not a quantity
+census["year"] = census.year.astype(str)
+
+# "Other tribes" is ~8 million people and would squash everyone else
+census = census[census.tribe != "Other tribes"]
+
+provisional = census[census.version == "bad"]
+provisional.head()
+```
+
+Two of those preparation steps are already mapping decisions:
+
+- **Year as text.** A number maps to a *continuous* colour gradient; a
+  label maps to *distinct* colours. We want two clearly different colours.
+- **Dropping "Other tribes".** Choosing what *not* to show is part of the
+  design.
+
+```{pyodide}
+#| setup: true
+#| exercise: [census_1, census_2, census_3, census_4]
+import pandas as pd
+from plotnine import *
+
+census = pd.read_csv("data/census_long.csv")
+tribe_order = (
+    census.query("version == 'good' and year == 2024")
+    .sort_values("population")
+    .tribe
+)
+census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
+census["year"] = census.year.astype(str)
+census = census[census.tribe != "Other tribes"]
+provisional = census[census.version == "bad"]
+```
+
+### Step 1: Points
+
+Map `population` to x position, `tribe` to y position, and `year` to
+colour.
+
+```{pyodide}
+#| exercise: census_1
+(
+    ggplot(provisional, aes(x=___, y=___))
+    + geom_point(aes(color=___), size=3)
+)
+```
+
+::: {.hint exercise="census_1"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Column names go in quotes: `x="population"`.
 :::
+:::
+
+::: {.solution exercise="census_1"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: census_1
+#| solution: true
+(
+    ggplot(provisional, aes(x="population", y="tribe"))
+    + geom_point(aes(color="year"), size=3)
+)
+```
+:::
+:::
+
+### Step 2: Connect the dots
+
+Add a line from each tribe's 2014 point to its 2024 point. `group` tells
+plotnine which points belong to the same line.
+
+```{pyodide}
+#| exercise: census_2
+(
+    ggplot(provisional, aes(x="population", y="tribe"))
+    + geom_line(aes(group=___), color="grey")
+    + geom_point(aes(color="year"), size=3)
+)
+```
+
+::: {.hint exercise="census_2"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Each line joins the two points for one tribe.
+:::
+:::
+
+::: {.solution exercise="census_2"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: census_2
+#| solution: true
+(
+    ggplot(provisional, aes(x="population", y="tribe"))
+    + geom_line(aes(group="tribe"), color="grey")
+    + geom_point(aes(color="year"), size=3)
+)
+```
+:::
+:::
+
+The line comes *before* the points so that the points are drawn on top.
+Layers are drawn in the order you add them.
+
+::: {.callout-important}
+## What do you see?
+
+Across all these tribes, Uganda's population grew by about a quarter
+between 2014 and 2024. Look at the length and the direction of each line.
+Which tribes don't fit?
+:::
+
+::: {.callout-note collapse="true"}
+## Answer
+
+- **Bagisu** and **Acholi** go *backwards*: their populations shrank in
+  ten years in which the country grew by 9 million people.
+- **Bakiga** and **Langi** have far longer lines than tribes of similar
+  size. Bakiga doubled.
+
+These four tribes had their 2014 figures swapped with each other.
+:::
+
+### Step 3: Compare with the corrected figures
+
+Now plot both versions side by side. `census` holds the `bad` and `good`
+rows; split them into panels with `facet_wrap()`.
+
+```{pyodide}
+#| exercise: census_3
+(
+    ggplot(census, aes(x="population", y="tribe"))
+    + geom_line(aes(group="tribe"), color="grey")
+    + geom_point(aes(color="year"), size=3)
+    + facet_wrap(___)
+)
+```
+
+::: {.hint exercise="census_3"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Which column says whether a row is from the provisional or the corrected
+report?
+:::
+:::
+
+::: {.solution exercise="census_3"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: census_3
+#| solution: true
+(
+    ggplot(census, aes(x="population", y="tribe"))
+    + geom_line(aes(group="tribe"), color="grey")
+    + geom_point(aes(color="year"), size=3)
+    + facet_wrap("version")
+)
+```
+:::
+:::
+
+In the corrected figures every tribe grows, and by similar proportions.
+
+### Step 4: Look closer
+
+The four swapped tribes jump out. Are they the only errors? Compare the two
+panels row by row — the plot is yours to change. Try zooming in on the
+smaller tribes.
+
+```{pyodide}
+#| exercise: census_4
+small = census[census.tribe.isin(["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"])]
+
+(
+    ggplot(small, aes(x="population", y="tribe"))
+    + geom_line(aes(group="tribe"), color="grey")
+    + geom_point(aes(color="year"), size=3)
+    + facet_wrap("version")
+    + scale_x_continuous(labels=lambda s: [f"{x/1e6:.1f}M" for x in s])
+)
+```
+
+The last line changes the *labels* on the x-axis (1,200,000 → 1.2M), not
+the mapping itself.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+**Banyoro**, **Alur** and **Bakonzo** also had their 2014 figures swapped,
+in a smaller cycle: Banyoro got Alur's figure, Alur got Bakonzo's and
+Bakonzo got Banyoro's. Their populations are close in size, so the error
+is subtle: 3–14%, compared with 20–45% for the big four.
+:::
+
+### Why the plot worked
+
+The table showed each population as **text in a cell**. To see growth,
+you had to read two numbers and subtract.
+
+The plot maps the change to the **length and direction of a line**. You
+see that without reading a single number.
+
+The data didn't change. The mapping did.

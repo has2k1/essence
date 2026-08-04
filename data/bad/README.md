@@ -12,8 +12,8 @@ in a cycle:
 | Bagisu | Bakiga          | 2,390,975      | 1,646,904    |
 
 These swaps produce absurd implied growth rates (Bakiga +7.2%/year — a
-doubling in ten years; Bagisu and Acholi *negative* while Uganda grew
-~3%/year nationally). The report was retracted within four days.
+doubling in ten years; Bagisu and Acholi *negative* while the tribes'
+total grew ~2.3%/year). The report was retracted within four days.
 
 The 2024 figures are identical to those in `good/`.
 
