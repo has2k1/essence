@@ -17,6 +17,11 @@ Country-level life expectancy, population, and GDP per capita for 52 African
 countries, 1952–2007 (`gapminder_africa.csv`) and the 2007 snapshot
 (`gapminder_africa_2007.csv`).
 
+The `region` column is not from Gapminder: it assigns each country to one
+of five regions following the
+[UN M49 sub-regions](https://unstats.un.org/unsd/methodology/m49/), with
+"Middle Africa" renamed "Central Africa".
+
 Source: [Gapminder](https://www.gapminder.org/data/), via the
 [gapminder R package](https://github.com/jennybc/gapminder)
 

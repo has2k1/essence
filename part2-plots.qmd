@@ -6,6 +6,7 @@ pyodide:
     - pandas
   resources:
     - data/gapminder_africa_2007.csv
+    - data/gapminder_africa.csv
     - data/census_long.csv
 execute:
   echo: true
@@ -20,9 +21,11 @@ mappings from data to visual properties, then layering on geometric objects.
 Everything below runs in your browser. Press ▶ Run to execute a cell, and
 edit the code freely — you can't break anything.
 
+Our data is life expectancy, population and wealth (GDP per person) for
+52 African countries in 2007, from [Gapminder](https://www.gapminder.org/).
+
 ```{pyodide}
-#| exercise: first_plot_0
-#| envir: first_plot
+#| exercise: gap_0
 #| autorun: true
 #| edit: false
 import pandas as pd
@@ -33,8 +36,20 @@ gapminder.head()
 ```
 
 ```{pyodide}
-#| exercise: first_plot_1
-#| envir: first_plot
+#| setup: true
+#| exercise: [gap_1, gap_2, gap_3, gap_4]
+import pandas as pd
+from plotnine import *
+
+gapminder = pd.read_csv("data/gapminder_africa_2007.csv")
+```
+
+A plotnine plot starts with `ggplot()`: the data, and the **mappings**
+from columns to visual properties, written inside `aes()`. Then you add a
+**layer** that draws something: here, a point for each row.
+
+```{pyodide}
+#| exercise: gap_1
 #| autorun: true
 (
     ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
@@ -42,38 +57,323 @@ gapminder.head()
 )
 ```
 
-One mapping so far: `gdpPercap` → x position, `lifeExp` → y position.
-
-## 2b. Faded example
+Two mappings: `gdpPercap` → x position, `lifeExp` → y position.
 
 ::: {.callout-tip}
-## Coming soon
+## Try it
 
-Fill in the blanks: add a size mapping for `pop` (population).
+Swap `x` and `y` and run the code again. The data is the same; only the
+mapping changed.
 :::
 
-## 2c. Layered composition
+## 2b. More mappings
 
-::: {.callout-tip}
-## Coming soon
+Position is not the only visual property. Here, `region` also maps to
+colour:
 
-Add layers: a trend line, labels, a log scale.
+```{pyodide}
+#| exercise: gap_2
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point(aes(color="region"))
+)
+```
+
+Mappings can go in `ggplot()`, where every layer uses them, or in a
+layer's own `aes()`, where only that layer uses them.
+
+Now map population (`pop`) to the size of each point:
+
+```{pyodide}
+#| exercise: gap_3
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point(aes(color="region", size=___))
+)
+```
+
+::: {.hint exercise="gap_3"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Column names go in quotes, just like `color="region"`.
+:::
 :::
 
-## 2d. Parsons problem
+::: {.solution exercise="gap_3"}
+::: {.callout-tip collapse="false"}
+## Solution
 
-::: {.callout-tip}
-## Coming soon
+```{pyodide}
+#| exercise: gap_3
+#| solution: true
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point(aes(color="region", size="pop"))
+)
+```
+:::
+:::
 
-Rearrange the lines of a scrambled plot specification into working order.
+Now map a *number* to colour. Fill in `lifeExp`:
+
+```{pyodide}
+#| exercise: gap_4
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point(aes(color=___), size=3)
+)
+```
+
+::: {.solution exercise="gap_4"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: gap_4
+#| solution: true
+(
+    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    + geom_point(aes(color="lifeExp"), size=3)
+)
+```
+:::
+:::
+
+::: {.callout-important}
+## What changed?
+
+Compare the colour legend with the one for `region`. Why is it different?
+:::
+
+::: {.callout-note collapse="true"}
+## Answer
+
+`region` is **text**: a handful of separate categories, so it maps to
+separate, distinct colours. `lifeExp` is a **number**: values that run
+continuously from low to high, so it maps to a continuous colour gradient.
+
+The kind of data decides the kind of mapping. You will use this in 2f.
+
+Notice too that `size=3` is outside `aes()`. Inside `aes()`, a value
+comes *from the data*; outside, it is a fixed setting for every point.
+:::
+
+## 2c. Layers
+
+Life expectancy over time, for four East African countries:
+
+```{pyodide}
+#| exercise: layers_0
+#| autorun: true
+#| edit: false
+import pandas as pd
+from plotnine import *
+
+gapminder = pd.read_csv("data/gapminder_africa.csv")
+east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
+east.head()
+```
+
+```{pyodide}
+#| setup: true
+#| exercise: [layers_1, layers_2, parsons, facet_1, facet_2]
+import pandas as pd
+from plotnine import *
+
+gapminder = pd.read_csv("data/gapminder_africa.csv")
+east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
+```
+
+Let's draw a line through the points:
+
+```{pyodide}
+#| exercise: layers_1
+(
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + geom_line()
+)
+```
+
+::: {.callout-important}
+## What went wrong?
+
+This isn't four lines. Why?
+:::
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Nothing told plotnine that the rows belong to four different countries.
+So it drew *one* line through every point from left to right, zigzagging
+between countries within each year.
+:::
+
+The `group` mapping says which rows belong to the same line. Group by
+country, then add a second layer: points coloured by country.
+
+```{pyodide}
+#| exercise: layers_2
+(
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group=___), color="grey")
+    + geom_point(aes(color="country"))
+)
+```
+
+::: {.hint exercise="layers_2"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Each line is one country.
+:::
+:::
+
+::: {.solution exercise="layers_2"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: layers_2
+#| solution: true
+(
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+    + geom_point(aes(color="country"))
+)
+```
+:::
+:::
+
+Layers are drawn in the order you add them, so the points sit on top of
+the lines. Swap the two layers and run it again to see the difference.
+
+The steep fall and recovery is Rwanda, around the time of the 1994
+genocide.
+
+## 2d. Put it in order
+
+Rearrange these lines to reproduce the plot below. One line is not needed.
+
+```{python}
+#| echo: false
+import pandas as pd
+from plotnine import *
+
+gapminder = pd.read_csv("data/gapminder_africa.csv")
+east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
+(
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+    + geom_point(aes(color="country"))
+    + labs(x="", y="Life expectancy (years)", color="Country")
+)
+```
+
+```{pyodide}
+#| exercise: parsons
+    + labs(x=None, y="Life expectancy (years)", color="Country")
+    + geom_point(aes(color="country"))
+)
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + labs(x="", y="Life expectancy (years)", color="Country")
+(
+    + geom_line(aes(group="country"), color="grey")
+```
+
+::: {.hint exercise="parsons"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Start with `ggplot()`, then add layers in drawing order. Look closely at
+the x-axis of the target: does it have a label?
+:::
+:::
+
+::: {.solution exercise="parsons"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: parsons
+#| solution: true
+(
+    ggplot(east, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+    + geom_point(aes(color="country"))
+    + labs(x="", y="Life expectancy (years)", color="Country")
+)
+```
+
+`x=None` means "no label chosen", so plotnine falls back to the column
+name, `year`. `x=""` sets the label to empty text, removing it.
+:::
 :::
 
 ## 2e. Small multiples
 
-::: {.callout-tip}
-## Coming soon
+Now all 52 countries, one line each:
 
-Faceting with the full Gapminder Africa time series.
+```{pyodide}
+#| exercise: facet_1
+(
+    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+)
+```
+
+That's hard to read. Split it into one small panel per region with
+`facet_wrap()`:
+
+```{pyodide}
+#| exercise: facet_2
+(
+    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+    + facet_wrap(___)
+)
+```
+
+::: {.hint exercise="facet_2"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`facet_wrap()` takes a column name, in quotes. Which column holds the
+region?
+:::
+:::
+
+::: {.solution exercise="facet_2"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: facet_2
+#| solution: true
+(
+    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    + geom_line(aes(group="country"), color="grey")
+    + facet_wrap("region")
+)
+```
+:::
+:::
+
+Faceting is a mapping too: `region` → panel.
+
+::: {.callout-important}
+## What do you see?
+
+Which region's story was hidden in the single panel?
+:::
+
+::: {.callout-note collapse="true"}
+## Answer
+
+**Southern Africa.** Life expectancy rose steadily to 58–64 years around
+1990, then fell by 9–19 years by 2007: Swaziland went from 58.5 to 39.6.
+This was the HIV/AIDS epidemic. In the single panel, those five lines
+were buried among 47 others.
 :::
 
 ## 2f. Discovery: the census data
