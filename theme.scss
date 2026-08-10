@@ -8,3 +8,10 @@
 .qwebr-editor {
   margin-bottom: 1.5rem;
 }
+
+// Computed figures get a fixed width but no .img-fluid, so they overflow
+// the text column and are clipped.
+.figure-img {
+  max-width: 100%;
+  height: auto;
+}

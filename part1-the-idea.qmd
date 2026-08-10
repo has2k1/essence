@@ -31,10 +31,10 @@ We will come back to this story, and this data, throughout the workshop.
 Every visualisation — every plot, every table, every dashboard — is a
 **mapping from data values to visual properties**.
 
-| Data value | Visual property |
-|------------|-----------------|
-| a number | a position along an axis |
-| a category | a colour, a shape |
+| Data value  | Visual property                  |
+|-------------|----------------------------------|
+| a number    | a position along an axis         |
+| a category  | a colour, a shape                |
 | a magnitude | a length, an area, a font weight |
 
 That is the whole idea. The rest of the workshop is about learning to see
@@ -42,10 +42,112 @@ it, and to use it deliberately.
 
 ## 1c. What maps to what?
 
-::: {.callout-tip}
-## Check your understanding
+For each visualisation below, ask: **which data column maps to which
+visual property?** Discuss with a neighbour, then open the answer.
 
-*Three examples coming here: a bar chart, a heat map, and a formatted
-table. For each one, participants identify which data values map to which
-visual properties.*
+### A bar chart
+
+```{python}
+#| fig-alt: "Horizontal bar chart of the ten most populous African countries in 2007, with bars coloured by region. Nigeria is the longest bar at 135 million."
+import pandas as pd
+from plotnine import *
+from great_tables import GT
+
+gapminder_2007 = pd.read_csv("data/gapminder_africa_2007.csv")
+gapminder = pd.read_csv("data/gapminder_africa.csv")
+
+top = gapminder_2007.nlargest(10, "pop").copy()
+top["country"] = pd.Categorical(top.country, categories=top.sort_values("pop").country)
+(
+    ggplot(top, aes(x="country", y="pop", fill="region"))
+    + geom_col()
+    + coord_flip()
+    + scale_y_continuous(labels=lambda s: [f"{x/1e6:.0f}M" for x in s])
+    + labs(x="", y="Population, 2007", fill="Region",
+           title="Africa's ten most populous countries")
+    + theme(figure_size=(7, 4))
+)
+```
+
+::: {.callout-note collapse="true"}
+## Answer
+
+| Data column | Visual property                  |
+|-------------|----------------------------------|
+| country     | vertical position (one bar each) |
+| population  | bar length                       |
+| region      | bar colour                       |
+
+The bars are also *sorted* by population: order is a mapping too.
+:::
+
+### A heat map
+
+```{python}
+#| fig-alt: "Heat map of life expectancy in eight East African countries from 1952 to 2007. Each tile is coloured from dark purple (low) to yellow (high). Rwanda's 1992 tile is the darkest."
+east = gapminder[gapminder.region == "Eastern Africa"]
+east = east[east.country.isin(
+    ["Burundi", "Eritrea", "Ethiopia", "Kenya", "Rwanda", "Somalia", "Tanzania", "Uganda"]
+)]
+(
+    ggplot(east, aes(x="factor(year)", y="country", fill="lifeExp"))
+    + geom_tile(color="white")
+    + labs(x="", y="", fill="Life\nexpectancy", title="Life expectancy in East Africa")
+    + theme(figure_size=(8, 3.5))
+)
+```
+
+::: {.callout-note collapse="true"}
+## Answer
+
+| Data column     | Visual property     |
+|-----------------|---------------------|
+| year            | horizontal position |
+| country         | vertical position   |
+| life expectancy | tile colour         |
+
+Position places each tile; colour carries the value.
+:::
+
+### A table
+
+```{python}
+selected = gapminder_2007[gapminder_2007.country.isin(
+    ["Egypt", "Ghana", "Kenya", "Morocco", "Nigeria", "Rwanda", "Senegal", "Uganda"]
+)]
+selected = selected.sort_values(["region", "lifeExp"], ascending=[True, False])
+(
+    GT(selected[["country", "region", "lifeExp", "pop", "gdpPercap"]],
+       rowname_col="country", groupname_col="region")
+    .tab_header(title="Selected countries, 2007")
+    .fmt_number(columns="lifeExp", decimals=1)
+    .fmt_number(columns="pop", scale_by=1e-6, decimals=1, pattern="{x}M")
+    .fmt_currency(columns="gdpPercap", decimals=0)
+    .data_color(columns="lifeExp", palette="viridis")
+    .cols_label(lifeExp="Life expectancy", pop="Population", gdpPercap="GDP per person")
+)
+```
+
+::: {.callout-note collapse="true"}
+## Answer
+
+| Data column     | Visual property             |
+|-----------------|-----------------------------|
+| region          | row grouping                |
+| country         | row label                   |
+| life expectancy | cell colour *and* text      |
+| population      | text, formatted in millions |
+| GDP per person  | text, formatted as currency |
+
+A table maps data too: to text, formatting, grouping and order. The
+coloured column is the same mapping as the heat map above: value →
+colour, on the same colour scale.
+:::
+
+::: {.callout-important}
+## The question to keep asking
+
+A plot and a table are not different kinds of thing. Both answer the same
+question: **what maps to what?** We'll ask it of every visualisation in
+this workshop, starting with plots in Part 2.
 :::
