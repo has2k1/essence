@@ -115,7 +115,7 @@ Position places each tile; colour carries the value.
 selected = gapminder_2007[gapminder_2007.country.isin(
     ["Egypt", "Ghana", "Kenya", "Morocco", "Nigeria", "Rwanda", "Senegal", "Uganda"]
 )]
-selected = selected.sort_values(["region", "lifeExp"], ascending=[True, False])
+selected = selected.sort_values(["region", "lifeExp"], ascending=[True, False]).reset_index(drop=True)
 (
     GT(selected[["country", "region", "lifeExp", "pop", "gdpPercap"]],
        rowname_col="country", groupname_col="region")
