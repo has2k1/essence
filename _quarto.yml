@@ -3,6 +3,8 @@ project:
   output-dir: _site
   resources:
     - data/
+  post-render:
+    - scripts/copy-wheels.py
 
 website:
   title: "The Essence of Data Visualisation: Mapping from Data to Visual Properties"
