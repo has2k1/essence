@@ -33,7 +33,10 @@ Source: [World Bank Global Findex Database 2021](https://www.worldbank.org/en/pu
 
 ## Afrobeats
 
-Monthly Spotify listeners for top Afrobeats artists, approximate figures as
-of early 2025. Verify before the workshop.
+Spotify monthly listeners, now and at their all-time peak, in millions,
+for 13 artists, as of 1 October 2026. Monthly listeners change daily, so
+refresh the figures before each workshop.
 
-Source: Spotify artist pages
+Source: [kworb.net, Spotify top artists by monthly listeners](https://kworb.net/spotify/listeners.html),
+which collects the figures from Spotify artist pages. Countries are the
+artists' nationalities.

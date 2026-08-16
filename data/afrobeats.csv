@@ -1,14 +1,14 @@
-artist,country,monthly_listeners_m,genre
-Burna Boy,Nigeria,20.4,Afro-fusion
-Wizkid,Nigeria,15.8,Afrobeats
-Rema,Nigeria,24.6,Afro-rave
-Ayra Starr,Nigeria,18.9,Afrobeats
-Tems,Nigeria,16.2,Alté/R&B
-Asake,Nigeria,14.5,Afrobeats
-Davido,Nigeria,11.3,Afrobeats
-CKay,Nigeria,10.8,Afrobeats
-Amaarae,Ghana,4.2,Alté
-King Promise,Ghana,5.1,Highlife/Afrobeats
-Black Sherif,Ghana,6.7,Afro-drill
-Tyla,South Africa,28.3,Amapiano/Pop
-Uncle Waffles,Eswatini,3.4,Amapiano
+artist,country,listeners_m,peak_listeners_m
+Burna Boy,Nigeria,46.0,60.1
+Wizkid,Nigeria,15.8,19.0
+Rema,Nigeria,28.0,40.0
+Ayra Starr,Nigeria,20.0,32.2
+Tems,Nigeria,34.7,45.6
+Asake,Nigeria,8.8,11.6
+Davido,Nigeria,10.5,11.8
+CKay,Nigeria,11.0,15.5
+Amaarae,Ghana,4.7,10.7
+King Promise,Ghana,2.0,3.5
+Black Sherif,Ghana,2.6,3.1
+Tyla,South Africa,25.0,46.6
+Uncle Waffles,Eswatini,1.7,2.1

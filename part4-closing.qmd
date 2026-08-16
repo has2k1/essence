@@ -1,28 +1,202 @@
 ---
 title: "Part 4 — Closing"
+pyodide:
+  packages:
+    - plotnine==0.16.0a15
+    # See part3-tables.qmd: multimark must be installed before great-tables
+    - wheels/multimark-0.3.2-cp39-abi3-pyemscripten_2026_0_wasm32.whl
+    - great-tables==1.0.0
+    - pandas
+  resources:
+    - data/afrobeats.csv
 execute:
-  echo: true
+  echo: false
   warning: false
 ---
 
-## 4a. What you learned
+## 4a. Table or plot?
 
-One idea: **visualisation is a mapping from data values to visual
-properties.** You now have two tools for making those mappings deliberately:
-plotnine for plots, great-tables for tables.
+The census error lived in a table, and in 2f a plot caught it. But in 3f
+a table caught it too, once it showed the growth and coloured it.
 
-## 4b. Design exercise
+So the lesson is not "plots beat tables". Each is better at different
+things:
 
-::: {.callout-tip}
-## Coming soon
+| Reach for a **table** when… | Reach for a **plot** when… |
+|-----------------------------|----------------------------|
+| readers need exact values | readers need the overall pattern |
+| there are only a few values | there are many values |
+| columns have different units | you are comparing like with like |
+| someone will look values up | someone will scan for what stands out |
 
-A new small dataset. In pairs: decide the question, choose the mappings,
-build the visualisation — plot or table, your call.
+A census report needs the exact numbers, so it publishes a table. The
+people checking it before publication could have used a plot as well. In
+either medium, what made the error visible was a **deliberate choice of
+mapping**.
+
+::: {.callout-important}
+## Discuss
+
+Think of a table or plot you made or read recently. Would the other
+medium have served its readers better?
 :::
 
-## 4c. Where to go next
+## 4b. Design a visualisation
+
+Your data: Spotify monthly listeners for 13 African artists. Monthly
+listeners counts the different people who played an artist in the past
+28 days.
+
+```{python}
+import pandas as pd
+from plotnine import *
+from great_tables import GT
+
+afro = pd.read_csv("data/afrobeats.csv")
+GT(afro)
+```
+
+- `listeners_m`: monthly listeners on 1 October 2026, in millions
+- `peak_listeners_m`: the most monthly listeners the artist has ever had,
+  in millions
+
+In pairs, pick **one** question:
+
+A. **How far is each artist from their peak?**
+
+B. **Is it all Nigeria?** Which countries do the biggest artists come
+   from?
+
+Then decide:
+
+1. **Table or plot?**
+2. **What maps to what?** Which column becomes which visual property?
+3. **Sketch it**, on paper or in code below.
+
+Be ready to share your design, and *why* you chose it.
+
+```{pyodide}
+#| setup: true
+#| exercise: design
+import pandas as pd
+from plotnine import *
+from great_tables import GT
+
+afro = pd.read_csv("data/afrobeats.csv")
+```
+
+```{pyodide}
+#| exercise: design
+#| echo: true
+# afro is loaded, with plotnine and great-tables imported.
+# Start with a plot (ggplot(afro, ...)) or a table (GT(afro, ...)).
+afro
+```
+
+::: {.callout-tip collapse="true"}
+## Stuck? Some starting points
+
+- **Question A as a plot:** one row per artist, with a line from their
+  listeners now to their peak, like the dumbbell plot in 2f. With the data
+  as it is, `geom_segment(aes(x=..., xend=..., y=..., yend=...))` draws
+  that line in one layer.
+- **Question A as a table:** add a column for listeners as a share of the
+  peak, then colour it, as you coloured growth in 3d.
+- **Question B as a plot:** bars of listeners, coloured by country, like
+  the bar chart in 1c.
+:::
+
+::: {.callout-note collapse="true"}
+## Some possible designs
+
+There is no single right answer. Here are three.
+
+**Question A, plot.** Artist → vertical position, listeners → horizontal
+position, now or peak → colour. The length of each line is the distance
+from the peak.
+
+```{python}
+#| fig-alt: "Dumbbell chart of 13 artists' Spotify monthly listeners, now and at their peak. Tyla and Burna Boy have the longest lines; Uncle Waffles and Black Sherif the shortest."
+long = afro.melt(
+    id_vars=["artist", "country"],
+    value_vars=["listeners_m", "peak_listeners_m"],
+    var_name="when",
+    value_name="listeners",
+)
+long["when"] = long.when.map({"listeners_m": "Now", "peak_listeners_m": "Peak"})
+long["artist"] = pd.Categorical(
+    long.artist, categories=afro.sort_values("peak_listeners_m").artist
+)
+(
+    ggplot(long, aes(x="listeners", y="artist"))
+    + geom_line(aes(group="artist"), color="grey")
+    + geom_point(aes(color="when"), size=3)
+    + labs(x="Monthly listeners (millions)", y="", color="")
+    + theme(figure_size=(7, 4))
+)
+```
+
+**Question A, table.** Share of peak → text *and* colour, as in Part 3.
+Grouping rows by country keeps question B in view as well.
+
+```{python}
+share = afro.assign(share_of_peak=(afro.listeners_m / afro.peak_listeners_m).round(2))
+share = share.sort_values(["country", "share_of_peak"], ascending=[True, False])
+(
+    GT(share, rowname_col="artist", groupname_col="country")
+    .tab_header(title="How far from their peak?", subtitle="Spotify monthly listeners, 1 October 2026")
+    .tab_spanner(label="Monthly listeners (millions)", columns=["listeners_m", "peak_listeners_m"])
+    .cols_label(listeners_m="Now", peak_listeners_m="Peak", share_of_peak="Share of peak")
+    .fmt_number(columns=["listeners_m", "peak_listeners_m"], decimals=1)
+    .fmt_percent(columns="share_of_peak", decimals=0)
+    .data_color(columns="share_of_peak", palette=["#d7301f", "white"], domain=[0.4, 1])
+    .tab_source_note("Source: kworb.net, from Spotify")
+)
+```
+
+**Question B, plot.** Listeners → bar length, country → colour, and the
+bars sorted, so the biggest artists sit at the top.
+
+```{python}
+#| fig-alt: "Bar chart of 13 artists' monthly listeners, coloured by country. Nigerian artists take five of the top six places; Tyla of South Africa is fourth."
+ranked = afro.assign(
+    artist=pd.Categorical(afro.artist, categories=afro.sort_values("listeners_m").artist)
+)
+(
+    ggplot(ranked, aes(x="artist", y="listeners_m", fill="country"))
+    + geom_col()
+    + coord_flip()
+    + labs(x="", y="Monthly listeners (millions)", fill="Country")
+    + theme(figure_size=(7, 4))
+)
+```
+
+**What these show.** Nigerian artists take five of the top six places,
+but South Africa's Tyla is fourth.
+
+The plot and the table answer question A differently, because they map
+different things. The plot shows the gap in **millions**: Tyla and Burna
+Boy have the longest lines, around 14–22 million listeners below their
+peaks. The table shows the gap as a **share**: Burna Boy still has 77% of
+his peak, while Amaarae has only 44% of hers. Neither is wrong; choosing
+which one to show is part of the design.
+
+A caution about question B: you can't add monthly listeners together to
+compare countries. One person who plays both Burna Boy and Wizkid counts
+once for each.
+:::
+
+## 4c. The question to carry with you
+
+**What maps to what?**
+
+Whether you are building a plot with plotnine, designing a table with
+great-tables, or reading someone else's dashboard, that question is how
+you reason about any visualisation. Ask it of the next chart you see.
+
+### Where to go next
 
 - [plotnine documentation](https://plotnine.org/)
 - [Great Tables documentation](https://posit-dev.github.io/great-tables/)
-- [Gapminder](https://www.gapminder.org/) — the data behind our examples
-- [UBOS](https://www.ubos.org/) — Uganda Bureau of Statistics
+- [Gapminder](https://www.gapminder.org/), the data behind Parts 1 and 2
+- [UBOS](https://www.ubos.org/), the Uganda Bureau of Statistics
