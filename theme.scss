@@ -15,3 +15,57 @@
   max-width: 100%;
   height: auto;
 }
+
+// CodeMirror sets its own `monospace` font on the scroller; use the theme's
+// so editors match static code.
+.cm-editor .cm-scroller {
+  font-family: var(--bs-font-monospace);
+}
+
+// One size for live editors and static code (e.g. in solutions).
+:root {
+  --code-block-font-size: calc(var(--bs-body-font-size) * 0.925);
+}
+
+// live-runtime.css loads after the theme and sets this on the same selector.
+main .card.exercise-editor {
+  --exercise-font-size: var(--code-block-font-size);
+}
+
+.cm-editor .cm-scroller {
+  font-size: var(--exercise-font-size);
+}
+
+main div.sourceCode pre code {
+  font-size: var(--code-block-font-size);
+}
+
+// The TOC lives in the left sidebar, leaving the right margin empty. Let code
+// spill into it so long lines show without sideways scrolling, while prose
+// keeps its comfortable measure.
+@mixin code-breakout($width) {
+  main .exercise-editor,
+  main .exercise-hint,
+  main .exercise-solution,
+  main div.sourceCode {
+    margin-right: -$width;
+  }
+
+  // Already widened by their (possibly nested) hint/solution box.
+  main :is(.exercise-hint, .exercise-solution)
+    :is(.exercise-editor, .exercise-hint, .exercise-solution, div.sourceCode) {
+    margin-right: 0;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  @include code-breakout(150px);
+}
+
+@include media-breakpoint-up(xl) {
+  @include code-breakout(225px);
+}
+
+@media (min-width: 1280px) {
+  @include code-breakout(250px);
+}

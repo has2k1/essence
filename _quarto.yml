@@ -28,5 +28,5 @@ format:
   live-html:
     theme: theme.scss
     toc: true
-    toc-location: right
+    toc-location: left
     code-tools: true

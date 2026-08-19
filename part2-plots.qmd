@@ -591,7 +591,8 @@ smaller tribes.
 
 ```{pyodide}
 #| exercise: census_4
-small = census[census.tribe.isin(["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"])]
+small_tribes = ["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"]
+small = census.query("tribe in @small_tribes")
 
 (
     ggplot(small, aes(x="population", y="tribe"))

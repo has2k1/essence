@@ -66,7 +66,9 @@ provisional = load("bad")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024")
     .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
-    .tab_source_note("Source: UBOS, National Population and Housing Census 2024, provisional results")
+    .tab_source_note(
+        "Source: UBOS, National Population and Housing Census 2024, provisional results"
+    )
 )
 ```
 
@@ -153,7 +155,9 @@ credit the source with `tab_source_note()`:
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=[___, ___])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .tab_source_note("Source: UBOS, National Population and Housing Census 2024, provisional results")
+    .tab_source_note(
+        "Source: UBOS, National Population and Housing Census 2024, provisional results"
+    )
 )
 ```
 
@@ -177,7 +181,9 @@ credit the source with `tab_source_note()`:
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .tab_source_note("Source: UBOS, National Population and Housing Census 2024, provisional results")
+    .tab_source_note(
+        "Source: UBOS, National Population and Housing Census 2024, provisional results"
+    )
 )
 ```
 :::
@@ -210,8 +216,10 @@ labelled.loc[2, "population_2024"] = tag("D") + labelled.loc[2, "population_2024
 (
     GT(labelled, rowname_col="tribe")
     .tab_header(title=html("Population by tribe" + tag("C")))
-    .tab_spanner(label=html("Population" + tag("F")),
-                 columns=["population_2014", "population_2024"])
+    .tab_spanner(
+        label=html("Population" + tag("F")),
+        columns=["population_2014", "population_2024"]
+    )
     .cols_label(population_2014=html("2014" + tag("A")), population_2024="2024")
     .fmt_markdown(columns=["tribe", "population_2024"])
     .cols_align("right", columns=["population_2014", "population_2024"])
@@ -316,11 +324,18 @@ numbers are written.
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"],
-                scale_by=1e-6, decimals=2, pattern="{x}M")
+    .fmt_number(
+        columns=["population_2014", "population_2024"],
+        scale_by=1e-6,
+        decimals=2,
+        pattern="{x}M"
+    )
     .fmt_percent(columns="growth", decimals=0)
-    .data_color(columns="growth", palette=["#d7301f", "white", "#2166ac"],
-                domain=[-0.55, 1.05])
+    .data_color(
+        columns="growth",
+        palette=["#d7301f", "white", "#2166ac"],
+        domain=[-0.55, 1.05]
+    )
 )
 ```
 
@@ -331,11 +346,18 @@ numbers are written.
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"],
-                scale_by=___, decimals=___, pattern="{x}M")
+    .fmt_number(
+        columns=["population_2014", "population_2024"],
+        scale_by=___,
+        decimals=___,
+        pattern="{x}M"
+    )
     .fmt_percent(columns="growth", decimals=___)
-    .data_color(columns=___, palette=["#d7301f", "white", "#2166ac"],
-                domain=[-0.55, 1.05])
+    .data_color(
+        columns=___,
+        palette=["#d7301f", "white", "#2166ac"],
+        domain=[-0.55, 1.05]
+    )
 )
 ```
 
@@ -360,11 +382,18 @@ numbers are written.
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"],
-                scale_by=1e-6, decimals=2, pattern="{x}M")
+    .fmt_number(
+        columns=["population_2014", "population_2024"],
+        scale_by=1e-6,
+        decimals=2,
+        pattern="{x}M"
+    )
     .fmt_percent(columns="growth", decimals=0)
-    .data_color(columns="growth", palette=["#d7301f", "white", "#2166ac"],
-                domain=[-0.55, 1.05])
+    .data_color(
+        columns="growth",
+        palette=["#d7301f", "white", "#2166ac"],
+        domain=[-0.55, 1.05]
+    )
 )
 ```
 :::
@@ -406,9 +435,14 @@ the error would have been obvious *before* publication. Include:
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
     .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
     .fmt_percent(columns="growth", decimals=0)
-    .data_color(columns="growth", palette=["#d7301f", "white", "#2166ac"],
-                domain=[-0.55, 1.05])
-    .tab_source_note("Source: UBOS, National Population and Housing Census 2024, provisional results")
+    .data_color(
+        columns="growth",
+        palette=["#d7301f", "white", "#2166ac"],
+        domain=[-0.55, 1.05]
+    )
+    .tab_source_note(
+        "Source: UBOS, National Population and Housing Census 2024, provisional results"
+    )
 )
 ```
 :::
