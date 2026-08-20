@@ -1,5 +1,6 @@
 ---
-title: "Part 1 — The Idea"
+title: "1. The Idea"
+
 execute:
   echo: false
   warning: false

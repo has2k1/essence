@@ -1,5 +1,5 @@
 ---
-title: "Part 2 — Plots with plotnine"
+title: "2. Plots with plotnine"
 pyodide:
   packages:
     - plotnine==0.16.0a15

@@ -26,12 +26,12 @@ is editable and runnable.
 
 ## Workshop outline
 
-| Part                              | Topic                    | Tools        |
-|-----------------------------------|--------------------------|--------------|
-| [1. The Idea](part1-the-idea.qmd) | What maps to what?       | —            |
-| [2. Plots](part2-plots.qmd)       | The grammar of graphics  | plotnine     |
-| [3. Tables](part3-tables.qmd)     | Tables as visualisations | great-tables |
-| [4. Closing](part4-closing.qmd)   | Design your own          | both         |
+| Part                           | Topic                    | Tools        |
+|--------------------------------|--------------------------|--------------|
+| [1. The Idea](01-the-idea.qmd) | What maps to what?       | —            |
+| [2. Plots](02-plots.qmd)       | The grammar of graphics  | plotnine     |
+| [3. Tables](03-tables.qmd)     | Tables as visualisations | great-tables |
+| [4. Closing](04-closing.qmd)   | Design your own          | both         |
 
 ## Before you arrive
 

@@ -1,9 +1,9 @@
 ---
-title: "Part 4 — Closing"
+title: "4. Closing"
 pyodide:
   packages:
     - plotnine==0.16.0a15
-    # See part3-tables.qmd: multimark must be installed before great-tables
+    # See 03-tables.qmd: multimark must be installed before great-tables
     - wheels/multimark-0.3.2-cp39-abi3-pyemscripten_2026_0_wasm32.whl
     - great-tables==1.0.0
     - pandas
@@ -22,12 +22,12 @@ a table caught it too, once it showed the growth and coloured it.
 So the lesson is not "plots beat tables". Each is better at different
 things:
 
-| Reach for a **table** when… | Reach for a **plot** when… |
-|-----------------------------|----------------------------|
-| readers need exact values | readers need the overall pattern |
-| there are only a few values | there are many values |
-| columns have different units | you are comparing like with like |
-| someone will look values up | someone will scan for what stands out |
+| Reach for a **table** when…  | Reach for a **plot** when…            |
+|------------------------------|---------------------------------------|
+| readers need exact values    | readers need the overall pattern      |
+| there are only a few values  | there are many values                 |
+| columns have different units | you are comparing like with like      |
+| someone will look values up  | someone will scan for what stands out |
 
 A census report needs the exact numbers, so it publishes a table. The
 people checking it before publication could have used a plot as well. In

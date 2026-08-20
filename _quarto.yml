@@ -19,10 +19,10 @@ website:
       - section: "Workshop"
         contents:
           - href: index.qmd
-          - href: part1-the-idea.qmd
-          - href: part2-plots.qmd
-          - href: part3-tables.qmd
-          - href: part4-closing.qmd
+          - href: 01-the-idea.qmd
+          - href: 02-plots.qmd
+          - href: 03-tables.qmd
+          - href: 04-closing.qmd
 
 format:
   live-html:
