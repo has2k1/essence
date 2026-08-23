@@ -31,8 +31,8 @@ Our data is life expectancy, population and wealth (GDP per person) for
 import pandas as pd
 from plotnine import *
 
-gapminder = pd.read_csv("data/gapminder_africa_2007.csv")
-gapminder.head()
+africa_2007 = pd.read_csv("data/gapminder_africa_2007.csv")
+africa_2007.head()
 ```
 
 ```{pyodide}
@@ -41,7 +41,7 @@ gapminder.head()
 import pandas as pd
 from plotnine import *
 
-gapminder = pd.read_csv("data/gapminder_africa_2007.csv")
+africa_2007 = pd.read_csv("data/gapminder_africa_2007.csv")
 ```
 
 A plotnine plot starts with `ggplot()`: the data, and the **mappings**
@@ -52,12 +52,15 @@ from columns to visual properties, written inside `aes()`. Then you add a
 #| exercise: gap_1
 #| autorun: true
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point()
 )
 ```
 
-Two mappings: `gdpPercap` → x position, `lifeExp` → y position.
+Two mappings:
+
+1. `gdpPercap` → x position
+2. `lifeExp` → y position
 
 ::: {.callout-tip}
 ## Try it
@@ -74,7 +77,7 @@ colour:
 ```{pyodide}
 #| exercise: gap_2
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="region"))
 )
 ```
@@ -87,7 +90,7 @@ Now map population (`pop`) to the size of each point:
 ```{pyodide}
 #| exercise: gap_3
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="region", size=___))
 )
 ```
@@ -108,7 +111,7 @@ Column names go in quotes, just like `color="region"`.
 #| exercise: gap_3
 #| solution: true
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="region", size="pop"))
 )
 ```
@@ -120,7 +123,7 @@ Now map a *number* to colour. Fill in `lifeExp`:
 ```{pyodide}
 #| exercise: gap_4
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color=___), size=3)
 )
 ```
@@ -133,7 +136,7 @@ Now map a *number* to colour. Fill in `lifeExp`:
 #| exercise: gap_4
 #| solution: true
 (
-    ggplot(gapminder, aes(x="gdpPercap", y="lifeExp"))
+    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="lifeExp"), size=3)
 )
 ```
@@ -170,9 +173,11 @@ Life expectancy over time, for four East African countries:
 import pandas as pd
 from plotnine import *
 
-gapminder = pd.read_csv("data/gapminder_africa.csv")
-east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
-east.head()
+africa_history = pd.read_csv("data/gapminder_africa.csv")
+africa_history = pd.read_csv("data/gapminder_africa.csv")
+ea_countries = ["Kenya", "Rwanda", "Tanzania", "Uganda"]
+east_africa = africa_history.query("country in @ea_countries")
+east_africa.head()
 ```
 
 ```{pyodide}
@@ -181,8 +186,10 @@ east.head()
 import pandas as pd
 from plotnine import *
 
-gapminder = pd.read_csv("data/gapminder_africa.csv")
-east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
+africa_history = pd.read_csv("data/gapminder_africa.csv")
+east_africa = africa_history[
+    africa_history.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])
+]
 ```
 
 Let's draw a line through the points:
@@ -190,7 +197,7 @@ Let's draw a line through the points:
 ```{pyodide}
 #| exercise: layers_1
 (
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line()
 )
 ```
@@ -215,7 +222,7 @@ country, then add a second layer: points coloured by country.
 ```{pyodide}
 #| exercise: layers_2
 (
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line(aes(group=___), color="grey")
     + geom_point(aes(color="country"))
 )
@@ -237,7 +244,7 @@ Each line is one country.
 #| exercise: layers_2
 #| solution: true
 (
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + geom_point(aes(color="country"))
 )
@@ -260,10 +267,12 @@ Rearrange these lines to reproduce the plot below. One line is not needed.
 import pandas as pd
 from plotnine import *
 
-gapminder = pd.read_csv("data/gapminder_africa.csv")
-east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])]
+africa_history = pd.read_csv("data/gapminder_africa.csv")
+east_africa = africa_history[
+    africa_history.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"])
+]
 (
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + geom_point(aes(color="country"))
     + labs(x="", y="Life expectancy (years)", color="Country")
@@ -275,7 +284,7 @@ east = gapminder[gapminder.country.isin(["Kenya", "Rwanda", "Tanzania", "Uganda"
     + labs(x=None, y="Life expectancy (years)", color="Country")
     + geom_point(aes(color="country"))
 )
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + labs(x="", y="Life expectancy (years)", color="Country")
 (
     + geom_line(aes(group="country"), color="grey")
@@ -298,7 +307,7 @@ the x-axis of the target: does it have a label?
 #| exercise: parsons
 #| solution: true
 (
-    ggplot(east, aes(x="year", y="lifeExp"))
+    ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + geom_point(aes(color="country"))
     + labs(x="", y="Life expectancy (years)", color="Country")
@@ -317,7 +326,7 @@ Now all 52 countries, one line each:
 ```{pyodide}
 #| exercise: facet_1
 (
-    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    ggplot(africa_history, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
 )
 ```
@@ -328,7 +337,7 @@ That's hard to read. Split it into one small panel per region with
 ```{pyodide}
 #| exercise: facet_2
 (
-    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    ggplot(africa_history, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + facet_wrap(___)
 )
@@ -351,7 +360,7 @@ region?
 #| exercise: facet_2
 #| solution: true
 (
-    ggplot(gapminder, aes(x="year", y="lifeExp"))
+    ggplot(africa_history, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + facet_wrap("region")
 )
