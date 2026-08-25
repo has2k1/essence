@@ -65,7 +65,7 @@ provisional = load("bad")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024")
-    .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
+    .fmt_integer(columns=["population_2014", "population_2024"])
     .tab_source_note(
         "Source: UBOS, National Population and Housing Census 2024, provisional results"
     )
@@ -253,7 +253,7 @@ as whole numbers and the growth column as a percentage:
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
+    .fmt_integer(columns=["population_2014", "population_2024"])
     .fmt_percent(columns="growth", decimals=0)
 )
 ```
@@ -272,7 +272,7 @@ colour:
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
+    .fmt_integer(columns=["population_2014", "population_2024"])
     .fmt_percent(columns="growth", decimals=0)
     .data_color(
         columns="growth",
@@ -433,7 +433,7 @@ the error would have been obvious *before* publication. Include:
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(columns=["population_2014", "population_2024"], decimals=0)
+    .fmt_integer(columns=["population_2014", "population_2024"])
     .fmt_percent(columns="growth", decimals=0)
     .data_color(
         columns="growth",
