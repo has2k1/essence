@@ -25,17 +25,12 @@ of five regions following the
 Source: [Gapminder](https://www.gapminder.org/data/), via the
 [gapminder R package](https://github.com/jennybc/gapminder)
 
-## Mobile money
-
-Percentage of adults (15+) with a mobile money account, by country, 2021.
-
-Source: [World Bank Global Findex Database 2021](https://www.worldbank.org/en/publication/globalfindex)
-
 ## Afrobeats
 
 Spotify monthly listeners, now and at their all-time peak, in millions,
 for 13 artists, as of 1 October 2026. Monthly listeners change daily, so
-refresh the figures before each workshop.
+refresh the figures before each workshop, then update the date in
+`04-closing.qmd` (the column description and the table subtitle).
 
 Source: [kworb.net, Spotify top artists by monthly listeners](https://kworb.net/spotify/listeners.html),
 which collects the figures from Spotify artist pages. Countries are the

@@ -174,7 +174,6 @@ import pandas as pd
 from plotnine import *
 
 africa_history = pd.read_csv("data/gapminder_africa.csv")
-africa_history = pd.read_csv("data/gapminder_africa.csv")
 ea_countries = ["Kenya", "Rwanda", "Tanzania", "Uganda"]
 east_africa = africa_history.query("country in @ea_countries")
 east_africa.head()
@@ -261,6 +260,7 @@ genocide.
 ## 2d. Put it in order
 
 Rearrange these lines to reproduce the plot below. One line is not needed.
+Cut and paste lines within the editor to reorder them.
 
 ```{python}
 #| echo: false
@@ -620,8 +620,11 @@ the mapping itself.
 
 **Banyoro**, **Alur** and **Bakonzo** also had their 2014 figures swapped,
 in a smaller cycle: Banyoro got Alur's figure, Alur got Bakonzo's and
-Bakonzo got Banyoro's. Their populations are close in size, so the error
-is subtle: 3–14%, compared with 20–45% for the big four.
+Bakonzo got Banyoro's. The typical tribe grew by about 27%. In the
+provisional figures, Bakonzo grew by 14%, Alur by 35% and Banyoro by 39%,
+so each is 8–13 percentage points from typical. The big four are 36–73
+points away: Bagisu −12%, Acholi −9%, Langi +64% and Bakiga +100%. The
+smaller tribes are close in size, so their error is subtle.
 :::
 
 ### Why the plot worked

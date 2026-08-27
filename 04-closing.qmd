@@ -60,7 +60,7 @@ GT(afro)
 - `peak_listeners_m`: the most monthly listeners the artist has ever had,
   in millions
 
-In pairs, pick **one** question:
+You have 7 minutes. In pairs, pick **one** question:
 
 A. **How far is each artist from their peak?**
 
@@ -73,7 +73,7 @@ Then decide:
 2. **What maps to what?** Which column becomes which visual property?
 3. **Sketch it**, on paper or in code below.
 
-Be ready to share your design, and *why* you chose it.
+Two pairs will share their design, and *why* they chose it.
 
 ```{pyodide}
 #| setup: true

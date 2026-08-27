@@ -24,14 +24,27 @@ In this two-hour, hands-on workshop you will:
 Everything runs in your browser — no installation needed. Every code block
 is editable and runnable.
 
+By the end you will be able to:
+
+1. explain what it means to map data to visual properties, and use that to
+   reason about any visualisation,
+2. build layered plots with plotnine,
+3. build structured tables with great-tables,
+4. decide when a table serves readers better than a plot, and vice versa,
+5. spot data errors through deliberate visualisation choices.
+
 ## Workshop outline
 
-| Part                           | Topic                    | Tools        |
-|--------------------------------|--------------------------|--------------|
-| [1. The Idea](01-the-idea.qmd) | What maps to what?       | —            |
-| [2. Plots](02-plots.qmd)       | The grammar of graphics  | plotnine     |
-| [3. Tables](03-tables.qmd)     | Tables as visualisations | great-tables |
-| [4. Closing](04-closing.qmd)   | Design your own          | both         |
+| Part                           | Topic                    | Tools        | Time   |
+|--------------------------------|--------------------------|--------------|--------|
+| [1. The Idea](01-the-idea.qmd) | What maps to what?       | —            | 15 min |
+| [2. Plots](02-plots.qmd)       | The grammar of graphics  | plotnine     | 45 min |
+| Break                          |                          |              | 10 min |
+| [3. Tables](03-tables.qmd)     | Tables as visualisations | great-tables | 35 min |
+| [4. Closing](04-closing.qmd)   | Design your own          | both         | 15 min |
+
+Each page loads Python in your browser, which takes a minute the first
+time. Open all four pages now, so they are ready when we reach them.
 
 ## Before you arrive
 
