@@ -632,7 +632,9 @@ smaller tribes are close in size, so their error is subtle.
 The table showed each population as **text in a cell**. To see growth,
 you had to read two numbers and subtract.
 
-The plot maps the change to the **length and direction of a line**. You
-see that without reading a single number.
+The plot maps the change to the **length and direction of a line**, and
+the population to a **position** on a shared axis. Position and length are
+the two properties people read most accurately, so you see the change
+without reading a single number.
 
 The data didn't change. The mapping did.

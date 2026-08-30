@@ -41,6 +41,26 @@ Every visualisation — every plot, every table, every dashboard — is a
 That is the whole idea. The rest of the workshop is about learning to see
 it, and to use it deliberately.
 
+### Choosing a mapping
+
+Some visual properties are easier to read accurately than others. In a
+classic study of graphical perception,^[Cleveland, W. S. and McGill, R.
+(1984). Graphical perception: Theory, experimentation, and application to
+the development of graphical methods. *Journal of the American Statistical
+Association*, 79(387), 531–554.
+<https://doi.org/10.1080/01621459.1984.10478080>] people judged numbers
+best from the properties at the top of this list:
+
+1. position along a shared axis
+2. length
+3. angle or slope
+4. area
+5. colour shade
+
+Use the properties near the top for the values readers must compare
+precisely. Use colour for categories, or for a value that only needs a
+rough reading.
+
 ## 1c. What maps to what?
 
 For each visualisation below, ask: **which data column maps to which
