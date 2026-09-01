@@ -23,9 +23,8 @@ formatting, colour, weight: all visual properties, all mappings from data.
 
 ## 3a. Tables deserve the same care as plots
 
-Here are the provisional census figures again, as a plain DataFrame. We've
-added one column, `growth`: how much each tribe's population grew between
-2014 and 2024, as a fraction (0.25 means it grew by 25%).
+Here are the provisional census figures again, as a plain DataFrame: one
+row per tribe, with its population in 2014 and in 2024.
 
 ```{pyodide}
 #| exercise: tables_0
@@ -37,15 +36,13 @@ from great_tables import GT
 def load(version):
     p2014 = pd.read_csv(f"data/{version}/census_2014.csv")
     p2024 = pd.read_csv(f"data/{version}/census_2024.csv")
-    df = p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
-    df["growth"] = (df.population_2024 / df.population_2014 - 1).round(2)
-    return df
+    return p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
 
 provisional = load("bad")
 provisional
 ```
 
-And here is the same data as a finished table, without the growth column:
+And here is the same data as a finished table:
 
 ```{python}
 #| echo: false
@@ -55,13 +52,11 @@ from great_tables import GT, html
 def load(version):
     p2014 = pd.read_csv(f"data/{version}/census_2014.csv")
     p2024 = pd.read_csv(f"data/{version}/census_2024.csv")
-    df = p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
-    df["growth"] = (df.population_2024 / df.population_2014 - 1).round(2)
-    return df
+    return p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
 
 provisional = load("bad")
 (
-    GT(provisional.drop(columns="growth"), rowname_col="tribe")
+    GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024")
@@ -78,11 +73,27 @@ thousands separators, and the tribe names are set apart from the data.
 But it hides the error just as well as the UBOS table did. Better-looking
 isn't enough. To reveal the error, a table needs a better **mapping**:
 it has to show the right values, in a way the eye can compare. We'll build
-up to that.
+up to that in 3d, where you add the missing column yourself.
 
 ```{pyodide}
 #| setup: true
-#| exercise: [tables_1, tables_2, tables_3, format_1, format_2, faded, rebuild_1, rebuild_2]
+#| exercise: [tables_1, tables_2, tables_3, tables_4, growth_1]
+import pandas as pd
+from great_tables import GT
+
+def load(version):
+    p2014 = pd.read_csv(f"data/{version}/census_2014.csv")
+    p2024 = pd.read_csv(f"data/{version}/census_2024.csv")
+    return p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
+
+provisional = load("bad")
+```
+
+The exercises from 3d onwards start with the `growth` column already added:
+
+```{pyodide}
+#| setup: true
+#| exercise: [format_1, format_2, faded, rebuild_1, rebuild_2]
 import pandas as pd
 from great_tables import GT
 
@@ -90,7 +101,7 @@ def load(version):
     p2014 = pd.read_csv(f"data/{version}/census_2014.csv")
     p2024 = pd.read_csv(f"data/{version}/census_2024.csv")
     df = p2014.merge(p2024, on="tribe", suffixes=("_2014", "_2024"))
-    df["growth"] = (df.population_2024 / df.population_2014 - 1).round(2)
+    df["growth"] = df.population_2024 / df.population_2014 - 1
     return df
 
 provisional = load("bad")
@@ -99,12 +110,19 @@ corrected = load("good")
 
 ## 3b. Building a table step by step
 
-A great-tables table starts with `GT()`: the data, and which column holds
-the row labels. Each method you chain on adds one piece of structure, just
-as each `+` adds a layer in plotnine.
+A great-tables table starts with `GT()`: pass it the data. Each method
+you chain on adds one piece of structure, just as each `+` adds a layer in
+plotnine.
 
 ```{pyodide}
 #| exercise: tables_1
+GT(provisional)
+```
+
+Tell `GT()` which column holds the row labels:
+
+```{pyodide}
+#| exercise: tables_2
 GT(provisional, rowname_col="tribe")
 ```
 
@@ -114,14 +132,14 @@ GT(provisional, rowname_col="tribe")
 Add a title and subtitle with `tab_header()`:
 
 ```{pyodide}
-#| exercise: tables_2
+#| exercise: tables_3
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title=___, subtitle=___)
 )
 ```
 
-::: {.hint exercise="tables_2"}
+::: {.hint exercise="tables_3"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
@@ -129,12 +147,12 @@ Titles are text, so put them in quotes: `title="Population by tribe"`.
 :::
 :::
 
-::: {.solution exercise="tables_2"}
+::: {.solution exercise="tables_3"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```{pyodide}
-#| exercise: tables_2
+#| exercise: tables_3
 #| solution: true
 (
     GT(provisional, rowname_col="tribe")
@@ -149,19 +167,19 @@ Now group the two population columns under one heading with
 credit the source with `tab_source_note()`:
 
 ```{pyodide}
-#| exercise: tables_3
+#| exercise: tables_4
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=[___, ___])
-    .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
+    .cols_label(population_2014="2014", population_2024="2024")
     .tab_source_note(
         "Source: UBOS, National Population and Housing Census 2024, provisional results"
     )
 )
 ```
 
-::: {.hint exercise="tables_3"}
+::: {.hint exercise="tables_4"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
@@ -169,18 +187,18 @@ credit the source with `tab_source_note()`:
 :::
 :::
 
-::: {.solution exercise="tables_3"}
+::: {.solution exercise="tables_4"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```{pyodide}
-#| exercise: tables_3
+#| exercise: tables_4
 #| solution: true
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
-    .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
+    .cols_label(population_2014="2014", population_2024="2024")
     .tab_source_note(
         "Source: UBOS, National Population and Housing Census 2024, provisional results"
     )
@@ -242,9 +260,44 @@ labelled.loc[2, "population_2024"] = tag("D") + labelled.loc[2, "population_2024
 
 ## 3d. Formatting as mapping
 
-So far the table shows raw values: `5555412` and `0.27`. The `fmt_*()`
-methods map those values to readable text. Format the population columns
-as whole numbers and the growth column as a percentage:
+The error is in the *change* between 2014 and 2024, and no column shows
+that. Choosing to show it is a mapping decision, and it is yours to make.
+Add a `growth` column: the 2024 population divided by the 2014 population,
+minus 1. A value of 0.25 means the tribe grew by 25%.
+
+```{pyodide}
+#| exercise: growth_1
+provisional["growth"] = provisional.population_2024 / provisional.___ - 1
+provisional
+```
+
+::: {.hint exercise="growth_1"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Growth compares the new population with the old one. Which column holds
+the old one?
+:::
+:::
+
+::: {.solution exercise="growth_1"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```{pyodide}
+#| exercise: growth_1
+#| solution: true
+provisional["growth"] = provisional.population_2024 / provisional.population_2014 - 1
+provisional
+```
+:::
+:::
+
+The exercises below add this column for you, so each one stands alone.
+
+The table now shows raw values: `5555412` and `0.27`. The `fmt_*()` methods
+map those values to readable text. Format the population columns as whole
+numbers and the growth column as a percentage:
 
 ```{pyodide}
 #| exercise: format_1
@@ -319,6 +372,7 @@ numbers are written.
 
 ```{python}
 #| echo: false
+provisional["growth"] = provisional.population_2024 / provisional.population_2014 - 1
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
