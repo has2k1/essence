@@ -56,6 +56,11 @@ main div.sourceCode pre code {
     :is(.exercise-editor, .exercise-hint, .exercise-solution, div.sourceCode) {
     margin-right: 0;
   }
+
+  // A callout box clips its content, so code must stay inside it.
+  main .callout div.sourceCode {
+    margin-right: 0;
+  }
 }
 
 @include media-breakpoint-up(lg) {

@@ -21,6 +21,43 @@ execute:
 A table is a visualisation too. Column position, alignment, number
 formatting, colour, weight: all visual properties, all mappings from data.
 
+::: {.callout-note collapse="true"}
+## Useful functions
+
+Part 3 uses one helper. It finds the limits of a colour scale from how the
+values are spread. The exercises already define it, so you don't need to
+copy it.
+
+```{python}
+import pandas as pd
+
+
+def iqr_limits(values: pd.Series) -> list[float]:
+    """
+    Return colour scale limits centred on the median
+
+    The limits are the same distance either side of the median, far enough
+    to reach the farther outlier boundary. The boundaries lie 1.5
+    interquartile ranges beyond the quartiles.
+
+    Parameters
+    ----------
+    values
+        The values to be coloured.
+
+    Returns
+    -------
+    limits
+        The lower and upper limit of the scale.
+    """
+    q1, median, q3 = values.quantile([0.25, 0.5, 0.75])
+    step = 1.5 * (q3 - q1)
+    low, high = q1 - step, q3 + step
+    reach = max(median - low, high - median)
+    return [median - reach, median + reach]
+```
+:::
+
 ## 3a. Tables deserve the same care as plots
 
 Here are the provisional census figures again, as a plain DataFrame: one
@@ -106,6 +143,30 @@ def load(version):
 
 provisional = load("bad")
 corrected = load("good")
+
+def iqr_limits(values: pd.Series) -> list[float]:
+    """
+    Return colour scale limits centred on the median
+
+    The limits are the same distance either side of the median, far enough
+    to reach the farther outlier boundary. The boundaries lie 1.5
+    interquartile ranges beyond the quartiles.
+
+    Parameters
+    ----------
+    values
+        The values to be coloured.
+
+    Returns
+    -------
+    limits
+        The lower and upper limit of the scale.
+    """
+    q1, median, q3 = values.quantile([0.25, 0.5, 0.75])
+    step = 1.5 * (q3 - q1)
+    low, high = q1 - step, q3 + step
+    reach = max(median - low, high - median)
+    return [median - reach, median + reach]
 ```
 
 ## 3b. Building a table step by step
@@ -316,7 +377,10 @@ years, Bagisu shrank by 12% and Acholi by 9%, while every other tribe grew.
 Bakiga doubled. But you still have to read each row to find it.
 
 Colour can do that work. `data_color()` maps each value to a background
-colour:
+colour. First we need to decide which values get which colours.
+`iqr_limits()`, defined at the top of this page, sets the scale from how
+the tribes' growth is spread. Pass its result to `data_color()` as the
+`domain`:
 
 ```{pyodide}
 #| exercise: format_2
@@ -330,7 +394,8 @@ colour:
     .data_color(
         columns="growth",
         palette=["#d7301f", "white", "#2166ac"],
-        domain=[-0.55, 1.05],
+        domain=iqr_limits(provisional.growth),
+        truncate=True,
     )
 )
 ```
@@ -339,17 +404,22 @@ The same table that hid the error now shows it at a glance. Nothing about
 the data changed; we chose a different mapping.
 
 ::: {.callout-important}
-## Why white at 25%?
+## Why these colours?
 
 `palette` lists three colours, and `domain` gives the range of values
-they span: red at −55%, blue at +105%, and white halfway, at 25%.
+they span. `iqr_limits()` puts white halfway, at the median growth (31%),
+and the red and blue ends at the same distance either side. That distance
+reaches the usual boundary for an outlier: 1.5 interquartile ranges beyond
+the quartiles. Values beyond that boundary take the end colour,
+because of `truncate=True`.
 
-25% is roughly how much the typical tribe grew over the ten years. So
-normal growth fades to white, and anything *unusual* stands out, in either
-direction: too slow (red) or too fast (blue).
+The quartiles come from the middle half of the tribes, so a few wrong
+values barely move the scale. Normal growth fades to white, and anything
+*unusual* stands out, in either direction: too slow (red) or too fast
+(blue).
 
-Try centring the scale on zero instead: `domain=[-1.05, 1.05]`. Which
-errors can you still see?
+Try centring the scale on zero instead: `domain=[-1, 1]`. Which errors can
+you still see?
 :::
 
 ::: {.callout-note collapse="true"}
@@ -357,12 +427,12 @@ errors can you still see?
 
 Bakiga still stands out in dark blue. But every other growing tribe turns
 blue too, and **Bagisu and Acholi fade to a pale pink**: −12% is a small
-step from zero on a scale that runs to ±105%. The most impossible numbers
+step from zero on a scale that runs to ±100%. The most impossible numbers
 in the table, populations *shrinking*, become the hardest to see.
 
 Where the scale is centred is a design choice, and it decides what the
-reader notices. (If a value falls outside `domain`, great-tables colours
-it grey, so choose a range that covers your data.)
+reader notices. (Without `truncate=True`, values outside `domain` are
+coloured grey.)
 :::
 
 ## 3e. Write the formatting
@@ -388,7 +458,8 @@ provisional["growth"] = provisional.population_2024 / provisional.population_201
     .data_color(
         columns="growth",
         palette=["#d7301f", "white", "#2166ac"],
-        domain=[-0.55, 1.05]
+        domain=iqr_limits(provisional.growth),
+        truncate=True
     )
 )
 ```
@@ -410,7 +481,8 @@ provisional["growth"] = provisional.population_2024 / provisional.population_201
     .data_color(
         columns=___,
         palette=["#d7301f", "white", "#2166ac"],
-        domain=[-0.55, 1.05]
+        domain=iqr_limits(provisional.growth),
+        truncate=True
     )
 )
 ```
@@ -446,7 +518,8 @@ provisional["growth"] = provisional.population_2024 / provisional.population_201
     .data_color(
         columns="growth",
         palette=["#d7301f", "white", "#2166ac"],
-        domain=[-0.55, 1.05]
+        domain=iqr_limits(provisional.growth),
+        truncate=True
     )
 )
 ```
@@ -464,7 +537,7 @@ the error would have been obvious *before* publication. Include:
 - a title and subtitle
 - a "Population" spanner over the two years
 - readable population and growth figures
-- colour on the growth column
+- colour on the growth column, as in 3d
 - the source
 
 ```{pyodide}
@@ -492,7 +565,8 @@ the error would have been obvious *before* publication. Include:
     .data_color(
         columns="growth",
         palette=["#d7301f", "white", "#2166ac"],
-        domain=[-0.55, 1.05]
+        domain=iqr_limits(provisional.growth),
+        truncate=True
     )
     .tab_source_note(
         "Source: UBOS, National Population and Housing Census 2024, provisional results"
@@ -503,7 +577,8 @@ the error would have been obvious *before* publication. Include:
 :::
 
 Now run exactly the same code on the corrected figures. Copy your table
-code below, and change `provisional` to `corrected`:
+code below, and change `provisional` to `corrected` everywhere, including
+the argument of `iqr_limits()`:
 
 ```{pyodide}
 #| exercise: rebuild_2
@@ -522,12 +597,16 @@ How do the corrected figures look, compared with the provisional ones?
 ::: {.callout-note collapse="true"}
 ## Answer
 
-Almost every cell is close to white: every tribe grew by about the usual
-amount. The loudest colours are gone.
+The four tribes that were solid red or blue are now close to white. In
+the corrected table only **Lugbara** is an outlier, and it stays red. Its
+growth really is low (12% over the ten years), so that is not an error.
+Colour shows what is *unusual*, not what is *wrong*. It tells you where to
+look, and then you check.
 
-**Lugbara** stays pink in both tables. Its growth really is low (12% over
-the ten years), so that is not an error. Colour shows what is *unusual*, not
-what is *wrong*. It tells you where to look, and then you check.
+Some other cells still carry a pale tint. The tribes in the corrected table
+grew at very similar rates, so its scale is narrow, and a small difference
+from the median shows as colour. Each table has its own scale, so only
+compare colours within one table.
 :::
 
 ## Plot or table?
