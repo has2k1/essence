@@ -165,6 +165,58 @@ coloured column is the same mapping as the heat map above: value →
 colour, on the same colour scale.
 :::
 
+## 1d. Same mapping, new coordinates
+
+A bar chart and a pie chart look like different kinds of chart. Here is one
+stacked bar of the five most populous African countries:
+
+```{python}
+#| fig-alt: "One tall stacked bar of the five most populous African countries in 2007, split by country. Nigeria is the largest segment at the top; South Africa is the smallest at the bottom."
+top5 = gapminder_2007.nlargest(5, "pop").copy()
+top5["country"] = pd.Categorical(
+    top5.country, categories=top5.sort_values("pop", ascending=False).country
+)
+stacked = (
+    ggplot(top5, aes(x=1, y="pop", fill="country"))
+    + geom_col(width=1)
+    + scale_x_continuous(expand=(0, 0))
+    + scale_y_continuous(
+        expand=(0, 0), labels=lambda s: [f"{x/1e6:.0f}M" for x in s]
+    )
+    + labs(x="", y="Population, 2007", fill="Country")
+    + theme(
+        figure_size=(5, 4),
+        axis_text_x=element_blank(),
+        axis_ticks_major_x=element_blank(),
+    )
+)
+stacked
+```
+
+Now draw the same bar in radial coordinates:
+
+```{python}
+#| fig-alt: "Pie chart of the five most populous African countries in 2007. Nigeria has the largest slice, about a third. Egypt, Ethiopia and DR Congo have slices of similar size."
+stacked + coord_radial(theta="y") + theme_void()
+```
+
+::: {.callout-note collapse="true"}
+## What changed?
+
+Nothing in the mapping. In both charts:
+
+| Data column | Visual property |
+|-------------|-----------------|
+| country     | colour          |
+| population  | size of segment |
+
+Radial coordinates bend the bar into a circle, so each segment's *length*
+becomes an *angle*.
+
+Compare Egypt, Ethiopia and DR Congo in each chart. Length is easier to
+judge than angle (see 1b), so the differences are clearer in the bar.
+:::
+
 ::: {.callout-important}
 ## The question to keep asking
 
