@@ -34,6 +34,33 @@ people checking it before publication could have used a plot as well. In
 either medium, what made the error visible was a **deliberate choice of
 mapping**.
 
+### Check: table or plot?
+
+For each situation, decide whether the readers are better served by a
+table or a plot, and name the **mapping** you would use. Vote with a
+neighbour, then open the answers.
+
+1. A clinic manager must report to the district health officer how many
+   vaccine doses each of six clinics received last month.
+2. An analyst wants to know whether rainfall has changed over 30 years at
+   40 weather stations.
+3. A newspaper publishes the population of 15 ethnic groups in two census
+   years, and wants readers to notice any group whose growth looks wrong.
+
+::: {.callout-note collapse="true"}
+## Answers
+
+1. **Table.** There are six values, and the officer will look up exact
+   numbers. Clinic → row label, doses → text.
+2. **Plot.** The question is about a pattern in 40 series. A line per
+   station, one small panel per region, as in 2e. Year → horizontal
+   position, rainfall → vertical position, station → line.
+3. **Either, or both.** A dumbbell plot (2f) lets readers scan for a
+   long or backwards line. A table (3d) lets them look up a figure, and
+   colour on the growth column does the scanning. A newspaper could
+   publish the plot, with the table for readers who want the numbers.
+:::
+
 ::: {.callout-important}
 ## Discuss
 
