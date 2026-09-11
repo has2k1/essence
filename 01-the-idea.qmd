@@ -9,8 +9,11 @@ execute:
 ## 1a. A table that started a national crisis
 
 In October 2024, the Uganda Bureau of Statistics (UBOS) published the
-provisional results of the National Population and Housing Census. One table
-— the population by tribe — set off a storm.
+provisional results of the National Population and Housing Census.^[Daily
+Monitor, "Ubos withdraws census report following public concerns".
+<https://www.monitor.co.ug/uganda/news/national/ubos-withdraws-census-report-following-public-concerns-4787808>
+(accessed 5 October 2026). The report went online on 3 October 2024.] One
+table — the population by tribe — set off a storm.
 
 ![Provisional census figures, as published](images/census-2024-bad-table.jpeg)
 
@@ -22,7 +25,12 @@ Look at the table for a moment. Does anything strike you as odd?
 Several tribes' 2014 baseline figures did not match the 2014 census. The
 figures for four tribes had been transposed — each tribe given another
 tribe's number — making their ten-year growth look impossible. UBOS
-withdrew the report and reissued corrected figures.
+withdrew the report and reissued corrected figures.^[Eagle Online, "UBOS
+retracts 2024 census report over ethnic group data errors", 8 October 2024.
+<https://eagle.co.ug/2024/10/08/ubos-retracts-2024-census-report-over-ethnic-group-data-errors/>
+(accessed 5 October 2026). The corrected figures are in the UBOS final
+report: [National Population and Housing Census 2024, Final Report, Volume 1
+(Main)](https://www.ubos.org/wp-content/uploads/2024/12/National-Population-and-Housing-Census-2024-Final-Report-Volume-1-Main.pdf).]
 
 We will come back to this story, and this data, throughout the workshop.
 :::
