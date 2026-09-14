@@ -85,38 +85,16 @@ colour:
 Mappings can go in `ggplot()`, where every layer uses them, or in a
 layer's own `aes()`, where only that layer uses them.
 
-Now map population (`pop`) to the size of each point:
+Population (`pop`) maps to the size of each point the same way:
 
 ```{pyodide}
 #| exercise: gap_3
-(
-    ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
-    + geom_point(aes(color="region", size=___))
-)
-```
-
-::: {.hint exercise="gap_3"}
-::: {.callout-note collapse="false"}
-## Hint
-
-Column names go in quotes, just like `color="region"`.
-:::
-:::
-
-::: {.solution exercise="gap_3"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```{pyodide}
-#| exercise: gap_3
-#| solution: true
+#| autorun: true
 (
     ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="region", size="pop"))
 )
 ```
-:::
-:::
 
 Now map a *number* to colour. Fill in `lifeExp`:
 
@@ -181,7 +159,7 @@ east_africa.head()
 
 ```{pyodide}
 #| setup: true
-#| exercise: [layers_1, layers_2, parsons, facet_1, facet_2]
+#| exercise: [layers_1, layers_2, parsons, facet_1]
 import pandas as pd
 from plotnine import *
 
@@ -281,11 +259,11 @@ east_africa = africa_history[
 
 ```{pyodide}
 #| exercise: parsons
-    + labs(x=None, y="Life expectancy (years)", color="Country")
+    + facet_wrap("region")
+    + labs(x="", y="Life expectancy (years)", color="Country")
     + geom_point(aes(color="country"))
 )
     ggplot(east_africa, aes(x="year", y="lifeExp"))
-    + labs(x="", y="Life expectancy (years)", color="Country")
 (
     + geom_line(aes(group="country"), color="grey")
 ```
@@ -294,8 +272,8 @@ east_africa = africa_history[
 ::: {.callout-note collapse="false"}
 ## Hint
 
-Start with `ggplot()`, then add layers in drawing order. Look closely at
-the x-axis of the target: does it have a label?
+Start with `ggplot()`, then add layers in drawing order. The target has a
+single panel.
 :::
 :::
 
@@ -313,60 +291,24 @@ the x-axis of the target: does it have a label?
     + labs(x="", y="Life expectancy (years)", color="Country")
 )
 ```
-
-`x=None` means "no label chosen", so plotnine falls back to the column
-name, `year`. `x=""` sets the label to empty text, removing it.
 :::
 :::
 
 ## 2e. Small multiples
 
-Now all 52 countries, one line each:
+Now all 52 countries, one line each. With 52 lines in a single panel the
+plot is hard to read, so `facet_wrap()` splits it into one small panel per
+region. Delete the last line to see the single-panel version.
 
 ```{pyodide}
 #| exercise: facet_1
-(
-    ggplot(africa_history, aes(x="year", y="lifeExp"))
-    + geom_line(aes(group="country"), color="grey")
-)
-```
-
-That's hard to read. Split it into one small panel per region with
-`facet_wrap()`:
-
-```{pyodide}
-#| exercise: facet_2
-(
-    ggplot(africa_history, aes(x="year", y="lifeExp"))
-    + geom_line(aes(group="country"), color="grey")
-    + facet_wrap(___)
-)
-```
-
-::: {.hint exercise="facet_2"}
-::: {.callout-note collapse="false"}
-## Hint
-
-`facet_wrap()` takes a column name, in quotes. Which column holds the
-region?
-:::
-:::
-
-::: {.solution exercise="facet_2"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```{pyodide}
-#| exercise: facet_2
-#| solution: true
+#| autorun: true
 (
     ggplot(africa_history, aes(x="year", y="lifeExp"))
     + geom_line(aes(group="country"), color="grey")
     + facet_wrap("region")
 )
 ```
-:::
-:::
 
 Faceting is a mapping too: `region` → panel.
 
@@ -437,7 +379,7 @@ Two of those preparation steps are already mapping decisions:
 
 ```{pyodide}
 #| setup: true
-#| exercise: [census_1, census_2, census_3, census_4]
+#| exercise: [census_1, census_2, census_3]
 import pandas as pd
 from plotnine import *
 
@@ -453,15 +395,17 @@ census = census[census.tribe != "Other tribes"]
 provisional = census[census.version == "bad"]
 ```
 
-### Step 1: Points
+### Step 1: Points and lines
 
-Map `population` to x position, `tribe` to y position, and `year` to
-colour.
+Map `population` to x position, `tribe` to y position and `year` to
+colour. Then add a line from each tribe's 2014 point to its 2024 point:
+`group` tells plotnine which points belong to the same line.
 
 ```{pyodide}
 #| exercise: census_1
 (
     ggplot(provisional, aes(x=___, y=___))
+    + geom_line(aes(group=___), color="grey")
     + geom_point(aes(color=___), size=3)
 )
 ```
@@ -470,7 +414,8 @@ colour.
 ::: {.callout-note collapse="false"}
 ## Hint
 
-Column names go in quotes: `x="population"`.
+Column names go in quotes: `x="population"`. Each line joins the two
+points for one tribe.
 :::
 :::
 
@@ -480,43 +425,6 @@ Column names go in quotes: `x="population"`.
 
 ```{pyodide}
 #| exercise: census_1
-#| solution: true
-(
-    ggplot(provisional, aes(x="population", y="tribe"))
-    + geom_point(aes(color="year"), size=3)
-)
-```
-:::
-:::
-
-### Step 2: Connect the dots
-
-Add a line from each tribe's 2014 point to its 2024 point. `group` tells
-plotnine which points belong to the same line.
-
-```{pyodide}
-#| exercise: census_2
-(
-    ggplot(provisional, aes(x="population", y="tribe"))
-    + geom_line(aes(group=___), color="grey")
-    + geom_point(aes(color="year"), size=3)
-)
-```
-
-::: {.hint exercise="census_2"}
-::: {.callout-note collapse="false"}
-## Hint
-
-Each line joins the two points for one tribe.
-:::
-:::
-
-::: {.solution exercise="census_2"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```{pyodide}
-#| exercise: census_2
 #| solution: true
 (
     ggplot(provisional, aes(x="population", y="tribe"))
@@ -549,13 +457,13 @@ Which tribes don't fit?
 These four tribes had their 2014 figures swapped with each other.
 :::
 
-### Step 3: Compare with the corrected figures
+### Step 2: Compare with the corrected figures
 
 Now plot both versions side by side. `census` holds the `bad` and `good`
 rows; split them into panels with `facet_wrap()`.
 
 ```{pyodide}
-#| exercise: census_3
+#| exercise: census_2
 (
     ggplot(census, aes(x="population", y="tribe"))
     + geom_line(aes(group="tribe"), color="grey")
@@ -564,7 +472,7 @@ rows; split them into panels with `facet_wrap()`.
 )
 ```
 
-::: {.hint exercise="census_3"}
+::: {.hint exercise="census_2"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
@@ -573,12 +481,12 @@ report?
 :::
 :::
 
-::: {.solution exercise="census_3"}
+::: {.solution exercise="census_2"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
 ```{pyodide}
-#| exercise: census_3
+#| exercise: census_2
 #| solution: true
 (
     ggplot(census, aes(x="population", y="tribe"))
@@ -592,14 +500,15 @@ report?
 
 In the corrected figures every tribe grows, and by similar proportions.
 
-### Step 4: Look closer
+### Step 3: Look closer (optional)
 
-The four swapped tribes jump out. Are they the only errors? Compare the two
+This step is optional: skip it if time is short. The four swapped tribes
+jump out. Are they the only errors? Compare the two
 panels row by row — the plot is yours to change. Try zooming in on the
 smaller tribes.
 
 ```{pyodide}
-#| exercise: census_4
+#| exercise: census_3
 small_tribes = ["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"]
 small = census.query("tribe in @small_tribes")
 
