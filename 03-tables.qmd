@@ -130,7 +130,7 @@ The exercises from 3d onwards start with the `growth` column already added:
 
 ```{pyodide}
 #| setup: true
-#| exercise: [format_1, format_2, faded, rebuild_1, rebuild_2]
+#| exercise: [format_1, format_2, rebuild_1]
 import pandas as pd
 from great_tables import GT
 
@@ -435,103 +435,11 @@ reader notices. (Without `truncate=True`, values outside `domain` are
 coloured grey.)
 :::
 
-## 3e. Write the formatting
+## 3e. Build the corrected table
 
-Fill in the blanks to reproduce this table. Look closely at how the
-numbers are written.
-
-```{python}
-#| echo: false
-provisional["growth"] = provisional.population_2024 / provisional.population_2014 - 1
-(
-    GT(provisional, rowname_col="tribe")
-    .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
-    .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
-    .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(
-        columns=["population_2014", "population_2024"],
-        scale_by=1e-6,
-        decimals=2,
-        pattern="{x}M"
-    )
-    .fmt_percent(columns="growth", decimals=0)
-    .data_color(
-        columns="growth",
-        palette=["#d7301f", "white", "#2166ac"],
-        domain=iqr_limits(provisional.growth),
-        truncate=True
-    )
-)
-```
-
-```{pyodide}
-#| exercise: faded
-(
-    GT(provisional, rowname_col="tribe")
-    .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
-    .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
-    .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(
-        columns=["population_2014", "population_2024"],
-        scale_by=___,
-        decimals=___,
-        pattern="{x}M"
-    )
-    .fmt_percent(columns="growth", decimals=___)
-    .data_color(
-        columns=___,
-        palette=["#d7301f", "white", "#2166ac"],
-        domain=iqr_limits(provisional.growth),
-        truncate=True
-    )
-)
-```
-
-::: {.hint exercise="faded"}
-::: {.callout-note collapse="false"}
-## Hint
-
-`scale_by` multiplies each value before it is shown. To show 7,037,404 as
-7.04, what do you multiply by? `1e-6` is Python for 0.000001.
-:::
-:::
-
-::: {.solution exercise="faded"}
-::: {.callout-tip collapse="false"}
-## Solution
-
-```{pyodide}
-#| exercise: faded
-#| solution: true
-(
-    GT(provisional, rowname_col="tribe")
-    .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
-    .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
-    .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
-    .fmt_number(
-        columns=["population_2014", "population_2024"],
-        scale_by=1e-6,
-        decimals=2,
-        pattern="{x}M"
-    )
-    .fmt_percent(columns="growth", decimals=0)
-    .data_color(
-        columns="growth",
-        palette=["#d7301f", "white", "#2166ac"],
-        domain=iqr_limits(provisional.growth),
-        truncate=True
-    )
-)
-```
-:::
-:::
-
-`pattern` wraps the formatted value in text: `{x}` stands for the number.
-
-## 3f. Rebuild the UBOS table
-
-Now build the whole table yourself, from `GT()` up. Aim for a table where
-the error would have been obvious *before* publication. Include:
+Now build a table for the corrected figures yourself, from `GT()` up. The
+`corrected` DataFrame is ready, with the `growth` column. Aim for a table
+where an error would have been obvious *before* publication. Include:
 
 - the tribes as row labels
 - a title and subtitle
@@ -543,7 +451,7 @@ the error would have been obvious *before* publication. Include:
 ```{pyodide}
 #| exercise: rebuild_1
 (
-    GT(provisional, rowname_col="tribe")
+    GT(corrected, rowname_col="tribe")
     # your code here
 )
 ```
@@ -556,7 +464,7 @@ the error would have been obvious *before* publication. Include:
 #| exercise: rebuild_1
 #| solution: true
 (
-    GT(provisional, rowname_col="tribe")
+    GT(corrected, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
     .tab_spanner(label="Population", columns=["population_2014", "population_2024"])
     .cols_label(population_2014="2014", population_2024="2024", growth="Growth")
@@ -565,33 +473,21 @@ the error would have been obvious *before* publication. Include:
     .data_color(
         columns="growth",
         palette=["#d7301f", "white", "#2166ac"],
-        domain=iqr_limits(provisional.growth),
+        domain=iqr_limits(corrected.growth),
         truncate=True
     )
     .tab_source_note(
-        "Source: UBOS, National Population and Housing Census 2024, provisional results"
+        "Source: UBOS, National Population and Housing Census 2024, corrected results"
     )
 )
 ```
 :::
 :::
-
-Now run exactly the same code on the corrected figures. Copy your table
-code below, and change `provisional` to `corrected` everywhere, including
-the argument of `iqr_limits()`:
-
-```{pyodide}
-#| exercise: rebuild_2
-(
-    GT(corrected, rowname_col="tribe")
-    # your code here
-)
-```
 
 ::: {.callout-important}
 ## What do you see?
 
-How do the corrected figures look, compared with the provisional ones?
+How does this table look, compared with the provisional one in 3d?
 :::
 
 ::: {.callout-note collapse="true"}

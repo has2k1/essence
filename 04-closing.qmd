@@ -16,7 +16,7 @@ execute:
 
 ## 4a. Table or plot?
 
-The census error lived in a table, and in 2f a plot caught it. But in 3f
+The census error lived in a table, and in 2f a plot caught it. But in 3e
 a table caught it too, once it showed the growth and coloured it.
 
 So the lesson is not "plots beat tables". Each is better at different
