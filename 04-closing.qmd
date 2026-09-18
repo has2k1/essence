@@ -176,7 +176,7 @@ share = share.sort_values(["country", "share_of_peak"], ascending=[True, False])
     .cols_label(listeners_m="Now", peak_listeners_m="Peak", share_of_peak="Share of peak")
     .fmt_number(columns=["listeners_m", "peak_listeners_m"], decimals=1)
     .fmt_percent(columns="share_of_peak", decimals=0)
-    .data_color(columns="share_of_peak", palette=["#d7301f", "white"], domain=[0.4, 1])
+    .data_color(columns="share_of_peak", palette=["#c13d31", "white"], domain=[0.4, 1])
     .tab_source_note("Source: kworb.net, from Spotify")
 )
 ```

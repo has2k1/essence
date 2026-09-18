@@ -393,7 +393,7 @@ the tribes' growth is spread. Pass its result to `data_color()` as the
     .fmt_percent(columns="growth", decimals=0)
     .data_color(
         columns="growth",
-        palette=["#d7301f", "white", "#2166ac"],
+        palette=["#c13d31", "white", "#1570d1"],
         domain=iqr_limits(provisional.growth),
         truncate=True,
     )
@@ -472,7 +472,7 @@ where an error would have been obvious *before* publication. Include:
     .fmt_percent(columns="growth", decimals=0)
     .data_color(
         columns="growth",
-        palette=["#d7301f", "white", "#2166ac"],
+        palette=["#c13d31", "white", "#1570d1"],
         domain=iqr_limits(corrected.growth),
         truncate=True
     )
