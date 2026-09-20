@@ -495,9 +495,12 @@ How does this table look, compared with the provisional one in 3d?
 
 The four tribes that were solid red or blue are now close to white. In
 the corrected table only **Lugbara** is an outlier, and it stays red. Its
-growth really is low (12% over the ten years), so that is not an error.
-Colour shows what is *unusual*, not what is *wrong*. It tells you where to
-look, and then you check.
+growth is low (12% over the ten years) next to a typical 27%.
+
+The colour tells you what is *unusual*. It does not tell you whether
+something is *wrong*. An outlier is a prompt to stop and think. Check the
+figures and how they were produced. Only then can you say whether it is an
+error or a real difference.
 
 Some other cells still carry a pale tint. The tribes in the corrected table
 grew at very similar rates, so its scale is narrow, and a small difference
