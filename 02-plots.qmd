@@ -547,3 +547,141 @@ the two properties people read most accurately, so you see the change
 without reading a single number.
 
 The data didn't change. The mapping did.
+
+## Other ways to show the change
+
+The dumbbell chart is one mapping among many. Each plot below shows the
+same census data with a different mapping. Run them, then change the code.
+
+```{pyodide}
+#| setup: true
+#| exercise: [alt_bars, alt_box, alt_lollipop, alt_index]
+import pandas as pd
+from plotnine import *
+
+census = pd.read_csv("data/census_long.csv")
+census = census[census.tribe != "Other tribes"]
+tribe_order = (
+    census.query("version == 'good' and year == 2024")
+    .sort_values("population")
+    .tribe
+)
+census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
+
+# One row per tribe and version, with the growth between the two censuses
+wide = census.pivot_table(
+    index=["tribe", "version"],
+    columns="year",
+    values="population",
+    observed=True,
+).reset_index()
+wide.columns = ["tribe", "version", "pop_2014", "pop_2024"]
+wide["growth"] = (wide.pop_2024 / wide.pop_2014 - 1) * 100
+
+# Each report has its own typical growth: the median of that report
+wide["vs_typical"] = wide.growth - wide.groupby("version").growth.transform("median")
+```
+
+### Bar chart of growth
+
+Growth maps to the *length* of a bar, which starts at zero. Sorting the
+tribes by growth puts the tribes that shrank at the bottom and the fastest
+growers at the top. The dashed line marks the median growth, so you can see
+how far each bar is from typical.
+
+```{pyodide}
+#| exercise: alt_bars
+provisional = wide[wide.version == "bad"].sort_values("growth")
+provisional = provisional.assign(
+    tribe=pd.Categorical(provisional.tribe.astype(str), categories=provisional.tribe.astype(str))
+)
+median_growth = provisional.growth.median()
+
+(
+    ggplot(provisional, aes(x="tribe", y="growth"))
+    + geom_col()
+    + annotate("hline", yintercept=median_growth, linetype="dashed")
+    + annotate("text", label="median", x=1, y=median_growth, ha="left")
+    + coord_flip()
+    + labs(y="Growth, 2014 to 2024 (%)")
+)
+```
+
+### Box plot of growth
+
+A box plot drops the tribes' identities and shows only the *distribution* of
+growth in each report. The box holds the middle half of the tribes. A point
+far outside it is an outlier. Here we label them.
+
+```{pyodide}
+#| exercise: alt_box
+outliers = wide[wide.vs_typical.abs() > 15]
+
+(
+    ggplot(wide, aes(x="version", y="growth"))
+    + geom_boxplot(outlier_alpha=0)
+    + geom_point()
+    + geom_text(aes(label="tribe"), data=outliers, ha="left", nudge_x=0.08, size=8)
+    + labs(y="Growth, 2014 to 2024 (%)")
+)
+```
+
+### Lollipop chart of growth
+
+Growth maps to position along a shared axis, with a stem to anchor each
+point at zero. Facets compare the provisional and corrected figures.
+
+```{pyodide}
+#| exercise: alt_lollipop
+(
+    ggplot(wide, aes(x="growth", y="tribe"))
+    + geom_segment(aes(x=0, xend="growth", yend="tribe"), color="grey")
+    + geom_point()
+    + facet_wrap("version")
+    + labs(x="Growth, 2014 to 2024 (%)")
+)
+```
+
+### Indexed slope chart
+
+Year maps to x position and each tribe is one line, so the *slope* carries
+the change. To compare tribes of different sizes on a linear axis, each
+tribe's 2014 population is set to 1. A line that ends at 2 doubled and
+a line that ends below 1 shrank.
+
+```{pyodide}
+#| exercise: alt_index
+provisional = wide[wide.version == "bad"]
+index = provisional.melt(
+    id_vars=["tribe", "growth", "vs_typical"],
+    value_vars=["pop_2014", "pop_2024"],
+    var_name="year",
+    value_name="population",
+).assign(
+    year=lambda d: d.year.str[-4:],
+    population=lambda d: d.population / d.groupby("tribe").population.transform("first"),
+    shrank=lambda d: d.growth < 0,
+)
+
+(
+    ggplot(index, aes(x="year", y="population", group="tribe", color="shrank"))
+    + geom_line()
+    + geom_point()
+    + geom_text(
+        aes(label="tribe"),
+        data=index[(index.year == "2024") & (index.vs_typical.abs() > 15)],
+        ha="left",
+        nudge_x=0.05,
+        size=8,
+    )
+    + annotate("hline", yintercept=1)
+    + annotate("text", label="No Growth", x=float("inf"), y=1, va="bottom", ha="right", size=8)
+    + scale_x_discrete(expand=(0.05, 0, 0.4, 0))
+    + labs(y="Population (2014 = 1)")
+    + theme(legend_position="none")
+)
+```
+
+Every one of these plots could have caught the error. They differ in what
+they ask the reader to judge: a length, a distance from the box, a position
+along a shared axis or a slope.
