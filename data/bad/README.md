@@ -1,36 +1,36 @@
-# Incorrect 2014 baseline figures
+# Provisional census figures
 
-These datasets reproduce the table published in the UBOS provisional report
-on 3 October 2024. Four tribes had their 2014 baseline populations swapped
-in a cycle:
+These files reproduce the UBOS provisional table published on
+3 October 2024. Four tribes were given one another's 2014 population
+figures:
 
-| Tribe  | Got figure from | Incorrect 2014 | Correct 2014 |
+| Tribe  | Figure taken from | Incorrect 2014 | Correct 2014 |
 |--------|-----------------|----------------|--------------|
 | Bakiga | Acholi          | 1,470,884      | 2,390,446    |
 | Acholi | Langi           | 2,131,443      | 1,470,554    |
 | Langi  | Bagisu          | 1,647,382      | 2,131,495    |
 | Bagisu | Bakiga          | 2,390,975      | 1,646,904    |
 
-These swaps produce absurd implied growth between 2014 and 2024: Bakiga
-+100% (a doubling), while Bagisu (−12%) and Acholi (−9%) *shrank* as the
-total population grew by 26%. The report was retracted within four days.
+The swaps make Bakiga appear to double in population, while Bagisu and
+Acholi appear to shrink during a period of national population growth.
+UBOS withdrew the report within four days.
 
 The 2024 figures are identical to those in `good/`.
 
-## Other differences in the provisional 2014 column
+## Other differences
 
-The provisional report used preliminary 2014 numbers that were later
-revised. Most tribes differ by only a few hundred (Baganda +93, Iteso +538,
-Bafumbira −222, …). Three further differences are large enough to notice:
+The provisional 2014 figures also differ slightly from the final figures
+for most other tribes. We have kept those differences to match the
+published table.
 
-- **Banyoro / Alur / Bakonzo** form a second, smaller cycle
-  (Banyoro ← Alur, Alur ← Bakonzo, Bakonzo ← Banyoro), off by 3–14%.
-- **Other tribes** is 6,572,351 in the provisional report vs 7,383,093 in
-  the final — a difference of ~811k, roughly absorbing the tribal
-  discrepancies.
+Banyoro, Alur and Bakonzo have another set of swapped figures. Banyoro
+received Alur's figure, Alur received Bakonzo's and Bakonzo received
+Banyoro's. Their populations are similar, making this swap harder to spot.
 
-These are authentic features of the published data, not transcription
-errors. Sharp-eyed participants may spot the second cycle during the 2f
-discovery exercise — a good discussion moment.
+The "Other tribes" figure is also lower in the provisional report:
+6,572,351 compared with 7,383,093 in the final report.
+
+These differences are in the published data. Participants may notice
+the smaller swap in the optional census exercise.
 
 Source: [Monitor, "Year of digital census with glitches"](https://www.monitor.co.ug/uganda/news/national/year-of-digital-census-with-glitches-4875218)

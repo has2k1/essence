@@ -13,16 +13,17 @@ execute:
   warning: false
 ---
 
-plotnine is the grammar of graphics in Python: you build a plot by declaring
-mappings from data to visual properties, then layering on geometric objects.
+With plotnine, you choose the data, say which columns control position,
+colour or size, and add layers that draw points, lines or bars.
 
-## 2a. Your first plot
+## Your first plot
 
-Everything below runs in your browser. Press ▶ Run to execute a cell, and
-edit the code freely — you can't break anything.
+Click Run below a code block to try it. Edit the exercise code and run it
+again to see what changes.
 
-Our data is life expectancy, population and wealth (GDP per person) for
-52 African countries in 2007, from [Gapminder](https://www.gapminder.org/).
+We'll use [Gapminder](https://www.gapminder.org/) data on life expectancy,
+population and GDP per person in African countries in 2007. GDP per
+person is a measure of economic output per person.
 
 ```{pyodide}
 #| exercise: gap_0
@@ -44,9 +45,9 @@ from plotnine import *
 africa_2007 = pd.read_csv("data/gapminder_africa_2007.csv")
 ```
 
-A plotnine plot starts with `ggplot()`: the data, and the **mappings**
-from columns to visual properties, written inside `aes()`. Then you add a
-**layer** that draws something: here, a point for each row.
+Start with `ggplot()`. Give it the data and use `aes()` to say which
+columns control the visual properties. Add `geom_point()` to draw a
+point for each row.
 
 ```{pyodide}
 #| exercise: gap_1
@@ -57,10 +58,8 @@ from columns to visual properties, written inside `aes()`. Then you add a
 )
 ```
 
-Two mappings:
-
-1. `gdpPercap` → x position
-2. `lifeExp` → y position
+`gdpPercap` controls horizontal position; `lifeExp` controls vertical
+position. Each point represents a country.
 
 ::: {.callout-tip}
 ## Try it
@@ -69,10 +68,9 @@ Swap `x` and `y` and run the code again. The data is the same; only the
 mapping changed.
 :::
 
-## 2b. More mappings
+## More mappings
 
-Position is not the only visual property. Here, `region` also maps to
-colour:
+We can also use colour to show which region each country belongs to:
 
 ```{pyodide}
 #| exercise: gap_2
@@ -85,7 +83,7 @@ colour:
 Mappings can go in `ggplot()`, where every layer uses them, or in a
 layer's own `aes()`, where only that layer uses them.
 
-Population (`pop`) maps to the size of each point the same way:
+Use population (`pop`) to control point size:
 
 ```{pyodide}
 #| exercise: gap_3
@@ -96,7 +94,8 @@ Population (`pop`) maps to the size of each point the same way:
 )
 ```
 
-Now map a *number* to colour. Fill in `lifeExp`:
+Now use colour to show life expectancy. Replace the blank with
+`"lifeExp"`:
 
 ```{pyodide}
 #| exercise: gap_4
@@ -130,19 +129,17 @@ Compare the colour legend with the one for `region`. Why is it different?
 ::: {.callout-note collapse="true"}
 ## Answer
 
-`region` is **text**: a handful of separate categories, so it maps to
-separate, distinct colours. `lifeExp` is a **number**: values that run
-continuously from low to high, so it maps to a continuous colour gradient.
+`region` contains category labels, so each region gets a distinct colour.
+`lifeExp` contains numbers, so the colours change gradually from low to
+high values.
 
-The kind of data decides the kind of mapping. You will use this in 2f.
-
-Notice too that `size=3` is outside `aes()`. Inside `aes()`, a value
-comes *from the data*; outside, it is a fixed setting for every point.
+Inside `aes()`, colour or size comes from a data column. Outside `aes()`,
+it is a fixed setting. Here, `size=3` makes every point the same size.
 :::
 
-## 2c. Layers
+## Layers
 
-Life expectancy over time, for four East African countries:
+Next, we'll look at life expectancy over time in East Africa:
 
 ```{pyodide}
 #| exercise: layers_0
@@ -182,19 +179,18 @@ Let's draw a line through the points:
 ::: {.callout-important}
 ## What went wrong?
 
-This isn't four lines. Why?
+We wanted a separate line for each country. What is missing?
 :::
 
 ::: {.callout-note collapse="true"}
 ## Answer
 
-Nothing told plotnine that the rows belong to four different countries.
-So it drew *one* line through every point from left to right, zigzagging
-between countries within each year.
+We haven't told plotnine which points belong together. It draws one line
+through all the countries, connecting points in order of year.
 :::
 
-The `group` mapping says which rows belong to the same line. Group by
-country, then add a second layer: points coloured by country.
+Use `group` to draw a line for each country. Then add points coloured
+by country.
 
 ```{pyodide}
 #| exercise: layers_2
@@ -232,13 +228,13 @@ Each line is one country.
 Layers are drawn in the order you add them, so the points sit on top of
 the lines. Swap the two layers and run it again to see the difference.
 
-The steep fall and recovery is Rwanda, around the time of the 1994
-genocide.
+Rwanda's line falls sharply around the time of the 1994 genocide, then
+rises again.
 
-## 2d. Put it in order
+## Put it in order
 
-Rearrange these lines to reproduce the plot below. One line is not needed.
-Cut and paste lines within the editor to reorder them.
+Rearrange the code to reproduce the plot below. Remove the line you
+don't need. You can cut and paste within the editor.
 
 ```{python}
 #| echo: false
@@ -272,8 +268,8 @@ east_africa = africa_history[
 ::: {.callout-note collapse="false"}
 ## Hint
 
-Start with `ggplot()`, then add layers in drawing order. The target has a
-single panel.
+Start with `ggplot()`, then add the lines and points in drawing order.
+The example has one panel.
 :::
 :::
 
@@ -294,11 +290,12 @@ single panel.
 :::
 :::
 
-## 2e. Small multiples
+## Separate panels
 
-Now all 52 countries, one line each. With 52 lines in a single panel the
-plot is hard to read, so `facet_wrap()` splits it into one small panel per
-region. Delete the last line to see the single-panel version.
+Putting every country in one plot makes the lines hard to follow.
+`facet_wrap()` gives each region its own panel. These separate views are
+called *facets*. Remove `+ facet_wrap("region")` to see all the lines
+together.
 
 ```{pyodide}
 #| exercise: facet_1
@@ -310,32 +307,29 @@ region. Delete the last line to see the single-panel version.
 )
 ```
 
-Faceting is a mapping too: `region` → panel.
+Here, `region` decides which panel each country appears in.
 
 ::: {.callout-important}
 ## What do you see?
 
-Which region's story was hidden in the single panel?
+Which region has a pattern that was hard to see with all the lines together?
 :::
 
 ::: {.callout-note collapse="true"}
 ## Answer
 
-**Southern Africa.** Life expectancy rose steadily to 58–64 years around
-1990, then fell by 9–19 years by 2007: Swaziland went from 58.5 to 39.6.
-This was the HIV/AIDS epidemic. In the single panel, those five lines
-were buried among 47 others.
+In Southern Africa, life expectancy rose, then fell sharply during the
+HIV/AIDS epidemic. Separating the regions makes that pattern easier to
+see.
 :::
 
-## 2f. Discovery: the census data
+## The census data
 
-Back to the table from Part 1. Its numbers were wrong, but they didn't
-*look* wrong: they were plausible, well formatted numbers in neat rows.
-Spotting the problem meant reading pairs of numbers and doing arithmetic
-in your head.
+Let's return to the census table. Its tidy rows made the figures look
+plausible. To notice the problem, you had to compare populations across
+the two years.
 
-A plot can do that work for you. Let's see whether one would have caught
-the error.
+We'll plot those pairs of values to make the change easier to see.
 
 ### The data
 
@@ -352,7 +346,7 @@ from plotnine import *
 
 census = pd.read_csv("data/census_long.csv")
 
-# List tribes from smallest to largest (corrected 2024 figures)
+# Use the corrected populations to keep tribe order the same in both panels
 tribe_order = (
     census.query("version == 'good' and year == 2024")
     .sort_values("population")
@@ -360,22 +354,21 @@ tribe_order = (
 )
 census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
 
-# A year is a label here, not a quantity
+# Treat years as categories so each census gets a distinct colour
 census["year"] = census.year.astype(str)
 
-# "Other tribes" is ~8 million people and would squash everyone else
+# Leave out "Other tribes" so the smaller populations are easier to compare
 census = census[census.tribe != "Other tribes"]
 
 provisional = census[census.version == "bad"]
 provisional.head()
 ```
 
-Two of those preparation steps are already mapping decisions:
+The setup makes two choices for this plot:
 
-- **Year as text.** A number maps to a *continuous* colour gradient; a
-  label maps to *distinct* colours. We want two clearly different colours.
-- **Dropping "Other tribes".** Choosing what *not* to show is part of the
-  design.
+- Treat the years as text so each census gets a distinct colour.
+- Leave out "Other tribes" so its large population doesn't compress the
+  rest of the plot. We'll keep that row in the tables.
 
 ```{pyodide}
 #| setup: true
@@ -395,11 +388,10 @@ census = census[census.tribe != "Other tribes"]
 provisional = census[census.version == "bad"]
 ```
 
-### Step 1: Points and lines
+### Points and lines
 
-Map `population` to x position, `tribe` to y position and `year` to
-colour. Then add a line from each tribe's 2014 point to its 2024 point:
-`group` tells plotnine which points belong to the same line.
+Use `population` for horizontal position, `tribe` for vertical position
+and `year` for colour. Group by tribe to join its two points with a line.
 
 ```{pyodide}
 #| exercise: census_1
@@ -435,29 +427,25 @@ points for one tribe.
 :::
 :::
 
-The line comes *before* the points so that the points are drawn on top.
-Layers are drawn in the order you add them.
+Add the line layer first so the points appear on top of it.
 
 ::: {.callout-important}
 ## What do you see?
 
-Across all these tribes, Uganda's population grew by about a quarter
-between 2014 and 2024. Look at the length and the direction of each line.
-Which tribes don't fit?
+The population across these tribes grew by about a quarter between
+2014 and 2024. Which lines suggest a fall or unusually large rise?
 :::
 
 ::: {.callout-note collapse="true"}
 ## Answer
 
-- **Bagisu** and **Acholi** go *backwards*: their populations shrank in
-  ten years in which the country grew by 9 million people.
-- **Bakiga** and **Langi** have far longer lines than tribes of similar
-  size. Bakiga doubled.
+Bagisu and Acholi appear to shrink while the country's population grew.
+Bakiga and Langi appear to grow much faster than tribes of similar size.
 
 These four tribes had their 2014 figures swapped with each other.
 :::
 
-### Step 2: Compare with the corrected figures
+### The corrected figures
 
 Now plot both versions side by side. `census` holds the `bad` and `good`
 rows; split them into panels with `facet_wrap()`.
@@ -500,12 +488,11 @@ report?
 
 In the corrected figures every tribe grows, and by similar proportions.
 
-### Step 3: Look closer (optional)
+### A closer look (optional)
 
-This step is optional: skip it if time is short. The four swapped tribes
-jump out. Are they the only errors? Compare the two
-panels row by row — the plot is yours to change. Try zooming in on the
-smaller tribes.
+If time allows, compare the smaller tribes in the two panels. Can you
+find any other figures that changed? Use the plot below as a starting
+point and edit it as you like.
 
 ```{pyodide}
 #| exercise: census_3
@@ -521,37 +508,28 @@ small = census.query("tribe in @small_tribes")
 )
 ```
 
-The last line changes the *labels* on the x-axis (1,200,000 → 1.2M), not
-the mapping itself.
+The last line labels the axis in millions. It changes how the numbers
+are written; the points stay in the same positions.
 
 ::: {.callout-note collapse="true"}
 ## Answer
 
-**Banyoro**, **Alur** and **Bakonzo** also had their 2014 figures swapped,
-in a smaller cycle: Banyoro got Alur's figure, Alur got Bakonzo's and
-Bakonzo got Banyoro's. In the corrected figures the typical (median) tribe
-grew by about 27%. In the provisional figures, Bakonzo grew by 14%, Alur by
-35% and Banyoro by 39%, so each is 8–13 percentage points from 27%. The big
-four are 36–73 points away: Bagisu −12%, Acholi −9%, Langi +64% and Bakiga
-+100%. The smaller tribes are close in size, so their error is subtle.
+Banyoro, Alur and Bakonzo also had their 2014 figures swapped. Banyoro
+got Alur's figure, Alur got Bakonzo's and Bakonzo got Banyoro's. Their
+populations are close in size, so these swaps are harder to notice.
 :::
 
-### Why the plot worked
+### The change in view
 
-The table showed each population as **text in a cell**. To see growth,
-you had to read two numbers and subtract.
+In the table, you had to read and compare two numbers to see the change.
+In the plot, each point shows a population and the line between them
+shows how much it changed. A backwards or unusually long line draws your
+attention to figures worth checking.
 
-The plot maps the change to the **length and direction of a line**, and
-the population to a **position** on a shared axis. Position and length are
-the two properties people read most accurately, so you see the change
-without reading a single number.
+## Other views of growth
 
-The data didn't change. The mapping did.
-
-## Other ways to show the change
-
-The dumbbell chart is one mapping among many. Each plot below shows the
-same census data with a different mapping. Run them, then change the code.
+The paired points joined by lines form a *dumbbell chart*. Below are
+other ways to show the same data. Run the examples and try changing them.
 
 ```{pyodide}
 #| setup: true
@@ -578,16 +556,15 @@ wide = census.pivot_table(
 wide.columns = ["tribe", "version", "pop_2014", "pop_2024"]
 wide["growth"] = (wide.pop_2024 / wide.pop_2014 - 1) * 100
 
-# Each report has its own typical growth: the median of that report
+# Compare each tribe with the median growth in its own report
 wide["vs_typical"] = wide.growth - wide.groupby("version").growth.transform("median")
 ```
 
 ### Bar chart of growth
 
-Growth maps to the *length* of a bar, which starts at zero. Sorting the
-tribes by growth puts the tribes that shrank at the bottom and the fastest
-growers at the top. The dashed line marks the median growth, so you can see
-how far each bar is from typical.
+Each bar shows growth from zero. Sorting puts falls at the bottom and
+the largest rises at the top. The dashed line marks the median, the
+middle growth value when the tribes are sorted.
 
 ```{pyodide}
 #| exercise: alt_bars
@@ -609,9 +586,9 @@ median_growth = provisional.growth.median()
 
 ### Box plot of growth
 
-A box plot drops the tribes' identities and shows only the *distribution* of
-growth in each report. The box holds the middle half of the tribes. A point
-far outside it is an outlier. Here we label them.
+A box plot summarises how growth varies within each report. The box
+contains the middle half of the values. The labelled points show tribes
+whose growth is far from the median.
 
 ```{pyodide}
 #| exercise: alt_box
@@ -628,8 +605,8 @@ outliers = wide[wide.vs_typical.abs() > 15]
 
 ### Lollipop chart of growth
 
-Growth maps to position along a shared axis, with a stem to anchor each
-point at zero. Facets compare the provisional and corrected figures.
+Each point shows a tribe's growth, with a line back to zero. The panels
+let you compare the provisional and corrected figures.
 
 ```{pyodide}
 #| exercise: alt_lollipop
@@ -642,12 +619,12 @@ point at zero. Facets compare the provisional and corrected figures.
 )
 ```
 
-### Indexed slope chart
+### Growth from a shared starting point
 
-Year maps to x position and each tribe is one line, so the *slope* carries
-the change. To compare tribes of different sizes on a linear axis, each
-tribe's 2014 population is set to 1. A line that ends at 2 doubled and
-a line that ends below 1 shrank.
+Each tribe starts at 1, representing its population in 2014. The second
+point shows its 2024 population relative to that starting value. Ending
+at 2 means doubling; ending below 1 means shrinking. This lets us
+compare growth across tribes of different sizes.
 
 ```{pyodide}
 #| exercise: alt_index
@@ -682,6 +659,5 @@ index = provisional.melt(
 )
 ```
 
-Every one of these plots could have caught the error. They differ in what
-they ask the reader to judge: a length, a distance from the box, a position
-along a shared axis or a slope.
+Each plot makes the unusual growth visible in a different way. Which
+one would you choose for someone checking the census figures?

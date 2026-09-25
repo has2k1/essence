@@ -14,13 +14,10 @@ execute:
   warning: false
 ---
 
-## 4a. Table or plot?
+## Table or plot?
 
-The census error lived in a table, and in 2f a plot caught it. But in 3e
-a table caught it too, once it showed the growth and coloured it.
-
-So the lesson is not "plots beat tables". Each is better at different
-things:
+We found the census errors using both a plot and a table. Each made
+growth easy to compare. Your choice depends on what readers need:
 
 | Reach for a **table** when…  | Reach for a **plot** when…            |
 |------------------------------|---------------------------------------|
@@ -29,50 +26,47 @@ things:
 | columns have different units | you are comparing like with like      |
 | someone will look values up  | someone will scan for what stands out |
 
-A census report needs the exact numbers, so it publishes a table. The
-people checking it before publication could have used a plot as well. In
-either medium, what made the error visible was a **deliberate choice of
-mapping**.
+A census report needs a table of exact figures. A plot can help check
+those figures before publication. In either, showing the change makes
+unusual growth easier to notice.
 
-### Check: table or plot?
+### Your choice
 
-For each situation, decide whether the readers are better served by a
-table or a plot, and name the **mapping** you would use. Vote with a
-neighbour, then open the answers.
+Discuss each situation with a neighbour. Choose a table, a plot or both,
+and explain how you would show the data. Then open the answers.
 
 1. A clinic manager must report to the district health officer how many
-   vaccine doses each of six clinics received last month.
-2. An analyst wants to know whether rainfall has changed over 30 years at
-   40 weather stations.
-3. A newspaper publishes the population of 15 ethnic groups in two census
+   vaccine doses each clinic received last month.
+2. An analyst wants to know whether rainfall has changed over several
+   decades at weather stations across the country.
+3. A newspaper publishes the population by ethnic group in two census
    years, and wants readers to notice any group whose growth looks wrong.
 
 ::: {.callout-note collapse="true"}
 ## Answers
 
-1. **Table.** There are six values, and the officer will look up exact
-   numbers. Clinic → row label, doses → text.
-2. **Plot.** The question is about a pattern in 40 series. A line per
-   station, one small panel per region, as in 2e. Year → horizontal
-   position, rainfall → vertical position, station → line.
-3. **Either, or both.** A dumbbell plot (2f) lets readers scan for a
-   long or backwards line. A table (3d) lets them look up a figure, and
-   colour on the growth column does the scanning. A newspaper could
-   publish the plot, with the table for readers who want the numbers.
+1. Use a table so the officer can look up the exact dose count for each
+   clinic. Put clinics in rows and doses in a column.
+2. Use a line plot to show rainfall over time, with a line per station
+   and a panel per region. Put year on the horizontal axis and rainfall
+   on the vertical axis.
+3. Use a dumbbell plot to show unusual changes, or a table with a
+   coloured growth column. Publishing both lets readers see the pattern
+   and look up the figures.
 :::
 
 ::: {.callout-important}
 ## Discuss
 
-Think of a table or plot you made or read recently. Would the other
-medium have served its readers better?
+Think of a table or plot you made or read recently. Would a different
+format have helped its readers?
 :::
 
-## 4b. Design a visualisation
+## Design a visualisation
 
-Your data: Spotify monthly listeners for 13 African artists. Monthly
-listeners counts the different people who played an artist in the past
-28 days.
+Use this data on Spotify monthly listeners for African artists. The
+count is the number of different people who played an artist in the
+past 28 days.
 
 ```{python}
 import pandas as pd
@@ -83,24 +77,23 @@ afro = pd.read_csv("data/afrobeats.csv")
 GT(afro)
 ```
 
-- `listeners_m`: monthly listeners on 1 October 2026, in millions
-- `peak_listeners_m`: the most monthly listeners the artist has ever had,
-  in millions
+`listeners_m` gives monthly listeners on 1 October 2026.
+`peak_listeners_m` gives each artist's highest recorded monthly listener
+count. Both columns are in millions.
 
-You have 7 minutes. In pairs, pick **one** question:
+Work in pairs for a few minutes. Pick one question:
 
 A. **How far is each artist from their peak?**
 
-B. **Is it all Nigeria?** Which countries do the biggest artists come
-   from?
+B. **Where are the most listened-to artists from?**
 
-Then decide:
+Prepare your design:
 
-1. **Table or plot?**
-2. **What maps to what?** Which column becomes which visual property?
-3. **Sketch it**, on paper or in code below.
+1. Choose a table or plot.
+2. Decide how to show each column through position, colour, size or text.
+3. Sketch your design on paper or try it in the code below.
 
-Two pairs will share their design, and *why* they chose it.
+We'll ask a few pairs to share their design and explain their choices.
 
 ```{pyodide}
 #| setup: true
@@ -115,35 +108,33 @@ afro = pd.read_csv("data/afrobeats.csv")
 ```{pyodide}
 #| exercise: design
 #| echo: true
-# afro is loaded, with plotnine and great-tables imported.
+# Use afro for the data. plotnine and great-tables are ready to use.
 # Start with a plot (ggplot(afro, ...)) or a table (GT(afro, ...)).
 afro
 ```
 
 ::: {.callout-tip collapse="true"}
-## Stuck? Some starting points
+## Starting points
 
-- **Question A as a plot:** one row per artist, with a line from their
-  listeners now to their peak, like the dumbbell plot in 2f. With the data
-  as it is, `geom_segment(aes(x=..., xend=..., y=..., yend=...))` draws
-  that line in one layer.
-- **Question A as a table:** add a column for listeners as a share of the
-  peak, then colour it, as you coloured growth in 3d.
-- **Question B as a plot:** bars of listeners, coloured by country, like
-  the bar chart in 1c.
+- Draw a line from each artist's current listener count to their peak
+  for question A. `geom_segment(aes(x=..., xend=..., y=..., yend=...))`
+  works with the data as it is.
+- Add a column showing current listeners as a share of the peak for
+  question A, then colour that column in a table.
+- Draw bars for listener counts and colour them by country for question B.
 :::
 
 ::: {.callout-note collapse="true"}
 ## Some possible designs
 
-There is no single right answer. Here are three.
+Here are some designs you could try.
 
-**Question A, plot.** Artist → vertical position, listeners → horizontal
-position, now or peak → colour. The length of each line is the distance
-from the peak.
+For question A, put artists on the vertical axis and listeners on the
+horizontal axis. Use colour to distinguish now from peak. Each line
+shows the gap between the two counts.
 
 ```{python}
-#| fig-alt: "Dumbbell chart of 13 artists' Spotify monthly listeners, now and at their peak. Tyla and Burna Boy have the longest lines; Uncle Waffles and Black Sherif the shortest."
+#| fig-alt: "Dumbbell chart of artists' Spotify monthly listeners, now and at their peak. Tyla and Burna Boy have the longest lines; Uncle Waffles and Black Sherif the shortest."
 long = afro.melt(
     id_vars=["artist", "country"],
     value_vars=["listeners_m", "peak_listeners_m"],
@@ -163,8 +154,8 @@ long["artist"] = pd.Categorical(
 )
 ```
 
-**Question A, table.** Share of peak → text *and* colour, as in Part 3.
-Grouping rows by country keeps question B in view as well.
+A table for question A can show the share of peak as both a percentage
+and a colour. Grouping artists by country also helps with question B.
 
 ```{python}
 share = afro.assign(share_of_peak=(afro.listeners_m / afro.peak_listeners_m).round(2))
@@ -181,11 +172,11 @@ share = share.sort_values(["country", "share_of_peak"], ascending=[True, False])
 )
 ```
 
-**Question B, plot.** Listeners → bar length, country → colour, and the
-bars sorted, so the biggest artists sit at the top.
+For question B, use bar length for listeners and colour for country.
+Sort the bars to put the most listened-to artists at the top.
 
 ```{python}
-#| fig-alt: "Bar chart of 13 artists' monthly listeners, coloured by country. Nigerian artists take five of the top six places; Tyla of South Africa is fourth."
+#| fig-alt: "Bar chart of artists' monthly listeners, coloured by country. Nigerian artists take five of the top six places; Tyla of South Africa is fourth."
 ranked = afro.assign(
     artist=pd.Categorical(afro.artist, categories=afro.sort_values("listeners_m").artist)
 )
@@ -198,28 +189,23 @@ ranked = afro.assign(
 )
 ```
 
-**What these show.** Nigerian artists take five of the top six places,
-but South Africa's Tyla is fourth.
+Nigerian artists hold most of the top places in this dataset, alongside
+South Africa's Tyla.
 
-The plot and the table answer question A differently, because they map
-different things. The plot shows the gap in **millions**: Tyla and Burna
-Boy have the longest lines, around 14–22 million listeners below their
-peaks. The table shows the gap as a **share**: Burna Boy still has 77% of
-his peak, while Amaarae has only 44% of hers. Neither is wrong; choosing
-which one to show is part of the design.
+For question A, the plot shows the gap in millions of listeners. Tyla
+and Burna Boy have the largest gaps. The table shows current listeners
+as a share of the peak: Burna Boy retains a much larger share than
+Amaarae. Choose the measure that best answers your question.
 
-A caution about question B: you can't add monthly listeners together to
-compare countries. One person who plays both Burna Boy and Wizkid counts
-once for each.
+Don't add the listener counts to compare countries. Someone who plays
+both Burna Boy and Wizkid appears in both artists' counts.
 :::
 
-## 4c. The question to carry with you
+## Your next chart or table
 
-**What maps to what?**
-
-Whether you are building a plot with plotnine, designing a table with
-great-tables, or reading someone else's dashboard, that question is how
-you reason about any visualisation. Ask it of the next chart you see.
+Ask what each position, colour, size or label represents. Then ask
+whether those choices help the reader find what they need. Use these
+questions when you read a visualisation or make your own.
 
 ### Where to go next
 

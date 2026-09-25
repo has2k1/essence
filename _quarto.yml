@@ -7,8 +7,8 @@ project:
     - scripts/copy-wheels.py
 
 website:
-  title: "The Essence of Data Visualisation: Mapping from Data to Visual Properties"
-  description: "PyCon Africa 2026 workshop — every plot and every table is a mapping from data to visual properties."
+  title: "The Essence of Data Visualisation"
+  description: "A PyCon Africa 2026 workshop on showing data clearly with plots and tables."
   reader-mode: true
   navbar:
     left:

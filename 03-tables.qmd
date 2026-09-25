@@ -18,15 +18,16 @@ execute:
   warning: false
 ---
 
-A table is a visualisation too. Column position, alignment, number
-formatting, colour, weight: all visual properties, all mappings from data.
+A table shows data through its layout as well as its text. Row labels,
+column headings, number formatting and colour all help readers find and
+compare values.
 
 ::: {.callout-note collapse="true"}
-## Useful functions
+## Colour scale helper
 
-Part 3 uses one helper. It finds the limits of a colour scale from how the
-values are spread. The exercises already define it, so you don't need to
-copy it.
+The colour exercises use this function to set the range of a colour
+scale. It is already included in their setup. Open the code if you
+want to see how it works.
 
 ```{python}
 import pandas as pd
@@ -36,9 +37,9 @@ def iqr_limits(values: pd.Series) -> list[float]:
     """
     Return colour scale limits centred on the median
 
-    The limits are the same distance either side of the median, far enough
-    to reach the farther outlier boundary. The boundaries lie 1.5
-    interquartile ranges beyond the quartiles.
+    Both limits are equally far from the median. They extend to at least
+    1.5 times the middle half's range below the lower quartile and above
+    the upper quartile.
 
     Parameters
     ----------
@@ -48,7 +49,7 @@ def iqr_limits(values: pd.Series) -> list[float]:
     Returns
     -------
     limits
-        The lower and upper limit of the scale.
+        The lower and upper limits of the scale.
     """
     q1, median, q3 = values.quantile([0.25, 0.5, 0.75])
     step = 1.5 * (q3 - q1)
@@ -58,10 +59,10 @@ def iqr_limits(values: pd.Series) -> list[float]:
 ```
 :::
 
-## 3a. Tables deserve the same care as plots
+## The census table
 
-Here are the provisional census figures again, as a plain DataFrame: one
-row per tribe, with its population in 2014 and in 2024.
+Here are the provisional census figures in a pandas DataFrame. Each row
+contains a tribe's population in 2014 and 2024.
 
 ```{pyodide}
 #| exercise: tables_0
@@ -79,7 +80,7 @@ provisional = load("bad")
 provisional
 ```
 
-And here is the same data as a finished table:
+Here is the same data with headings and number formatting:
 
 ```{python}
 #| echo: false
@@ -104,13 +105,11 @@ provisional = load("bad")
 )
 ```
 
-The finished table is easier to read: it has a title, the numbers have
-thousands separators, and the tribe names are set apart from the data.
+The title explains what the table contains. Commas make the large
+numbers easier to read, and the tribe names stand apart as row labels.
 
-But it hides the error just as well as the UBOS table did. Better-looking
-isn't enough. To reveal the error, a table needs a better **mapping**:
-it has to show the right values, in a way the eye can compare. We'll build
-up to that in 3d, where you add the missing column yourself.
+The errors are still hard to notice. We'll add a growth column and use
+colour to help readers find figures that need checking.
 
 ```{pyodide}
 #| setup: true
@@ -126,7 +125,8 @@ def load(version):
 provisional = load("bad")
 ```
 
-The exercises from 3d onwards start with the `growth` column already added:
+The formatting exercises have a separate setup that adds a `growth`
+column:
 
 ```{pyodide}
 #| setup: true
@@ -148,9 +148,9 @@ def iqr_limits(values: pd.Series) -> list[float]:
     """
     Return colour scale limits centred on the median
 
-    The limits are the same distance either side of the median, far enough
-    to reach the farther outlier boundary. The boundaries lie 1.5
-    interquartile ranges beyond the quartiles.
+    Both limits are equally far from the median. They extend to at least
+    1.5 times the middle half's range below the lower quartile and above
+    the upper quartile.
 
     Parameters
     ----------
@@ -160,7 +160,7 @@ def iqr_limits(values: pd.Series) -> list[float]:
     Returns
     -------
     limits
-        The lower and upper limit of the scale.
+        The lower and upper limits of the scale.
     """
     q1, median, q3 = values.quantile([0.25, 0.5, 0.75])
     step = 1.5 * (q3 - q1)
@@ -169,11 +169,10 @@ def iqr_limits(values: pd.Series) -> list[float]:
     return [median - reach, median + reach]
 ```
 
-## 3b. Building a table step by step
+## Building a table
 
-A great-tables table starts with `GT()`: pass it the data. Each method
-you chain on adds one piece of structure, just as each `+` adds a layer in
-plotnine.
+Start by passing the data to `GT()`. Then add method calls to build
+up the table's headings and formatting.
 
 ```{pyodide}
 #| exercise: tables_1
@@ -187,8 +186,7 @@ Tell `GT()` which column holds the row labels:
 GT(provisional, rowname_col="tribe")
 ```
 
-`rowname_col="tribe"` moves the tribe names out of the data and into the
-**stub**, the column of row labels on the left.
+`rowname_col="tribe"` places tribe names in the row labels on the left.
 
 Add a title and subtitle with `tab_header()`:
 
@@ -223,9 +221,9 @@ Titles are text, so put them in quotes: `title="Population by tribe"`.
 :::
 :::
 
-Now group the two population columns under one heading with
-`tab_spanner()`, give the columns short labels with `cols_label()`, and
-credit the source with `tab_source_note()`:
+Use `tab_spanner()` to put a shared heading above the population
+columns. Use `cols_label()` for their individual labels and
+`tab_source_note()` to credit the source:
 
 ```{pyodide}
 #| exercise: tables_4
@@ -268,13 +266,12 @@ credit the source with `tab_source_note()`:
 :::
 :::
 
-A spanner groups *columns* the way `facet_wrap()` groups plots: it shows
-which values belong together.
+A shared column heading is called a *spanner* in great-tables.
 
-## 3c. Which component?
+## Parts of a table
 
-Match each letter to a part of the table: **header**, **column label**,
-**stub**, **body**, **footer**, **spanner**.
+Match each letter to a part of the table: title, column label, row
+label, data cell, source note or shared column heading.
 
 ```{python}
 #| echo: false
@@ -309,22 +306,21 @@ labelled.loc[2, "population_2024"] = tag("D") + labelled.loc[2, "population_2024
 ::: {.callout-note collapse="true"}
 ## Answer
 
-| Letter | Component    | Made with           |
-|--------|--------------|---------------------|
-| A      | column label | `cols_label()`      |
-| B      | stub         | `rowname_col=`      |
-| C      | header       | `tab_header()`      |
-| D      | body         | the data            |
-| E      | footer       | `tab_source_note()` |
-| F      | spanner      | `tab_spanner()`     |
+| Letter | Table part     | Made with           |
+|--------|----------------|---------------------|
+| A      | column label   | `cols_label()`      |
+| B      | row label      | `rowname_col=`      |
+| C      | title          | `tab_header()`      |
+| D      | data cell      | the data            |
+| E      | source note    | `tab_source_note()` |
+| F      | shared heading | `tab_spanner()`     |
 :::
 
-## 3d. Formatting as mapping
+## Number formatting and colour
 
-The error is in the *change* between 2014 and 2024, and no column shows
-that. Choosing to show it is a mapping decision, and it is yours to make.
-Add a `growth` column: the 2024 population divided by the 2014 population,
-minus 1. A value of 0.25 means the tribe grew by 25%.
+A growth column will make the change between censuses easier to compare.
+Divide the 2024 population by the 2014 population and subtract 1. For
+example, 0.25 means growth of 25%.
 
 ```{pyodide}
 #| exercise: growth_1
@@ -356,9 +352,8 @@ provisional
 
 The exercises below add this column for you, so each one stands alone.
 
-The table now shows raw values: `5555412` and `0.27`. The `fmt_*()` methods
-map those values to readable text. Format the population columns as whole
-numbers and the growth column as a percentage:
+Use the `fmt_*()` methods to make the values easier to read. Format
+populations as whole numbers with commas and growth as a percentage:
 
 ```{pyodide}
 #| exercise: format_1
@@ -372,15 +367,13 @@ numbers and the growth column as a percentage:
 )
 ```
 
-Every number is now readable, and the error is *in* the table: in ten
-years, Bagisu shrank by 12% and Acholi by 9%, while every other tribe grew.
-Bakiga doubled. But you still have to read each row to find it.
+The growth column shows Bagisu and Acholi shrinking while other tribes
+grew, and Bakiga doubling. You can find these figures by reading each
+row. Colour will help them stand out.
 
-Colour can do that work. `data_color()` maps each value to a background
-colour. First we need to decide which values get which colours.
-`iqr_limits()`, defined at the top of this page, sets the scale from how
-the tribes' growth is spread. Pass its result to `data_color()` as the
-`domain`:
+`data_color()` gives cells a background colour based on their values.
+Use `iqr_limits()` to set the scale around the median growth, then pass
+those limits as `domain`:
 
 ```{pyodide}
 #| exercise: format_2
@@ -400,23 +393,18 @@ the tribes' growth is spread. Pass its result to `data_color()` as the
 )
 ```
 
-The same table that hid the error now shows it at a glance. Nothing about
-the data changed; we chose a different mapping.
+The unusually low and high growth figures now stand out in colour.
 
 ::: {.callout-important}
-## Why these colours?
+## The colour scale
 
-`palette` lists three colours, and `domain` gives the range of values
-they span. `iqr_limits()` puts white halfway, at the median growth (31%),
-and the red and blue ends at the same distance either side. That distance
-reaches the usual boundary for an outlier: 1.5 interquartile ranges beyond
-the quartiles. Values beyond that boundary take the end colour,
-because of `truncate=True`.
+`palette` gives the colours; `domain` gives the range of values they
+cover. White marks the median growth. Red shows lower growth and blue
+shows higher growth.
 
-The quartiles come from the middle half of the tribes, so a few wrong
-values barely move the scale. Normal growth fades to white, and anything
-*unusual* stands out, in either direction: too slow (red) or too fast
-(blue).
+The helper uses the middle half of the values to set the range, so a
+few extreme figures have less influence on the scale. `truncate=True`
+gives values beyond the limits the strongest red or blue.
 
 Try centring the scale on zero instead: `domain=[-1, 1]`. Which errors can
 you still see?
@@ -425,34 +413,32 @@ you still see?
 ::: {.callout-note collapse="true"}
 ## Answer
 
-Bakiga still stands out in dark blue. But every other growing tribe turns
-blue too, and **Bagisu and Acholi fade to a pale pink**: −12% is a small
-step from zero on a scale that runs to ±100%. The most impossible numbers
-in the table, populations *shrinking*, become the hardest to see.
+Bakiga stays dark blue, while Bagisu and Acholi become pale pink. On
+this wider scale, their falls are close to zero and attract less
+attention.
 
-Where the scale is centred is a design choice, and it decides what the
-reader notices. (Without `truncate=True`, values outside `domain` are
-coloured grey.)
+The centre and range of a colour scale affect what readers notice.
+Keep `truncate=True` when trying other ranges; without it, values
+outside `domain` appear grey.
 :::
 
-## 3e. Build the corrected table
+## The corrected table
 
-Now build a table for the corrected figures yourself, from `GT()` up. The
-`corrected` DataFrame is ready, with the `growth` column. Aim for a table
-where an error would have been obvious *before* publication. Include:
+Build a table using `corrected`, which already includes growth. Make
+the figures easy to read and unusual growth easy to spot.
 
-- the tribes as row labels
-- a title and subtitle
-- a "Population" spanner over the two years
-- readable population and growth figures
-- colour on the growth column, as in 3d
-- the source
+- Use the tribes as row labels.
+- Add a title and subtitle.
+- Place a "Population" heading above the two census years.
+- Format population and growth values for easy reading.
+- Colour the growth column as in the previous exercise.
+- Credit the source.
 
 ```{pyodide}
 #| exercise: rebuild_1
 (
     GT(corrected, rowname_col="tribe")
-    # your code here
+    # Add your table formatting here
 )
 ```
 
@@ -487,33 +473,28 @@ where an error would have been obvious *before* publication. Include:
 ::: {.callout-important}
 ## What do you see?
 
-How does this table look, compared with the provisional one in 3d?
+Compare this table with the coloured provisional table. What changed?
 :::
 
 ::: {.callout-note collapse="true"}
 ## Answer
 
-The four tribes that were solid red or blue are now close to white. In
-the corrected table only **Lugbara** is an outlier, and it stays red. Its
-growth is low (12% over the ten years) next to a typical 27%.
+The four tribes with swapped figures are now close to white. Lugbara
+stays red because its growth is much lower than the median.
 
-The colour tells you what is *unusual*. It does not tell you whether
-something is *wrong*. An outlier is a prompt to stop and think. Check the
-figures and how they were produced. Only then can you say whether it is an
-error or a real difference.
+Colour flags unusual values for investigation. Check the figures and
+how they were collected before deciding whether a difference is an
+error.
 
-Some other cells still carry a pale tint. The tribes in the corrected table
-grew at very similar rates, so its scale is narrow, and a small difference
-from the median shows as colour. Each table has its own scale, so only
-compare colours within one table.
+Each table has its own colour scale. The corrected figures have a
+narrower range, so even small differences show as a pale tint. Compare
+the numbers across tables; use colour to compare values within a table.
 :::
 
 ## Plot or table?
 
-In 2f, a plot revealed the error: the change was mapped to the length and
-direction of a line. Here a table revealed it: the change was mapped to a
-number *and* a colour.
+The census plot showed change through the length and direction of lines.
+This table shows it through percentages and colour.
 
-The plot is quicker for spotting a pattern. The table keeps the exact
-values, which is what a census report must publish. Both work for the same
-reason: they map the growth, not only the raw counts.
+The plot makes patterns quick to spot. The table also gives readers
+exact values. Both help because they make the growth easy to compare.

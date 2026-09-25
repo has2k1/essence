@@ -1,23 +1,11 @@
 [project]
 name = "the-essence-of-data-visualisation"
 version = "0.1.0"
-description = "The essence of data visualisation — PyCon Africa 2026"
+description = "The Essence of Data Visualisation at PyCon Africa 2026"
 long-description = {text = """\
-Every plot and every table you have ever seen is doing the same thing: mapping \
-data to visual properties. A scatter plot maps two columns to x and y positions. \
-A colour-coded table maps values to a colour scale. A bar chart and a pie chart \
-are the same mapping in different coordinate systems.
-
-Once you see this, you stop memorising chart types and start *reasoning* about \
-visualisation. You can look at any graphic — a plot, a table, a dashboard — and \
-ask one question: **"what maps to what?"**
-
-This workshop teaches that single idea and gives you two modern Python tools to \
-put it into practice: plotnine for plots (the grammar of graphics in Python) \
-and great-tables for publication-quality tables. Along the way, we use a case \
-study of a table error in the Uganda 2024 Census that triggered a national \
-crisis — to show why visualisation is not decoration: it is how you think \
-clearly about data.\
+Learn how position, colour, size and text show data. Build plots with \
+plotnine and tables with great-tables, then use Uganda census figures \
+to find errors that are hard to spot in a plain table.\
 """, content-type = "text/markdown"}
 requires-python = ">=3.11"
 dependencies = [
