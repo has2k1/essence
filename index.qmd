@@ -3,9 +3,11 @@ title: "The Essence of Data Visualisation"
 subtitle: "PyCon Africa 2026"
 ---
 
+::: {.workshop-intro}
 A plot uses position, size or colour to show data. A table uses text,
 layout and formatting. In both, we choose how a value appears on the page.
 We call this a *mapping*.
+:::
 
 In this workshop, you'll build plots with plotnine and tables with
 great-tables. You'll use data from the Uganda census to explore how these
@@ -20,13 +22,36 @@ By the end, you should be able to:
 
 ## Workshop outline
 
-| Part                        | Topic                            | Tool         |
-|-----------------------------|----------------------------------|--------------|
-| [The idea](01-the-idea.qmd) | How data becomes a visualisation |              |
-| [Plots](02-plots.qmd)       | Build and compare plots          | plotnine     |
-| Break                       |                                  |              |
-| [Tables](03-tables.qmd)     | Build and format tables          | great-tables |
-| [Closing](04-closing.qmd)   | Design your own visualisation    | Both         |
+```{=html}
+<div class="workshop-route">
+  <a href="01-the-idea.qmd">
+    <span class="route-number"><span class="visually-hidden">Part </span>01</span>
+    <span class="route-title">The idea</span>
+    <span class="route-description">How data becomes a visualisation</span>
+    <span class="route-tool">Mappings</span>
+  </a>
+  <a href="02-plots.qmd">
+    <span class="route-number"><span class="visually-hidden">Part </span>02</span>
+    <span class="route-title">Plots</span>
+    <span class="route-description">Build and compare plots</span>
+    <span class="route-tool">plotnine</span>
+  </a>
+  <a href="03-tables.qmd">
+    <span class="route-number"><span class="visually-hidden">Part </span>03</span>
+    <span class="route-title">Tables</span>
+    <span class="route-description">Build and format tables</span>
+    <span class="route-tool">great-tables</span>
+  </a>
+  <a href="04-closing.qmd">
+    <span class="route-number"><span class="visually-hidden">Part </span>04</span>
+    <span class="route-title">Closing</span>
+    <span class="route-description">Design your own visualisation</span>
+    <span class="route-tool">Plots and tables</span>
+  </a>
+</div>
+```
+
+We'll take a break between plots and tables.
 
 ## Getting ready
 

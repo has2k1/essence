@@ -3,6 +3,7 @@ project:
   output-dir: _site
   resources:
     - data/
+    - fonts/
   post-render:
     - scripts/copy-wheels.py
 
@@ -10,6 +11,7 @@ website:
   title: "The Essence of Data Visualisation"
   description: "A PyCon Africa 2026 workshop on showing data clearly with plots and tables."
   reader-mode: true
+  page-navigation: true
   navbar:
     left:
       - href: index.qmd
@@ -19,14 +21,18 @@ website:
       - section: "Workshop"
         contents:
           - href: index.qmd
+            text: Overview
           - href: 01-the-idea.qmd
           - href: 02-plots.qmd
           - href: 03-tables.qmd
           - href: 04-closing.qmd
+  page-footer:
+    left: "PyCon Africa 2026"
+    right: "The Essence of Data Visualisation"
 
 format:
   live-html:
     theme: theme.scss
+    css: fonts/fraunces.css
     toc: true
     toc-location: left
-    code-tools: true

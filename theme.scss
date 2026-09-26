@@ -1,8 +1,366 @@
 /*-- scss:defaults --*/
 
-// Warm, readable defaults for a workshop site.
+$body-bg: #fff;
+$body-color: #181818;
+$primary: #181818;
+$secondary: #626262;
+$link-color: #181818;
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-monospace: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+$font-size-base: 1.00rem;
+$line-height-base: 1.65;
+$headings-font-family: Fraunces, Georgia, serif;
+$headings-font-weight: 500;
+$navbar-bg: #fff;
+$navbar-fg: #181818;
+$navbar-hl: #181818;
+$sidebar-bg: #fff;
+$sidebar-fg: #626262;
+$sidebar-hl: #181818;
+$border-color: #d8d8d8;
+$code-color: #181818;
+$code-bg: #f2f2f2;
+$code-block-bg: #ffffff;
+$code-block-border-left: false;
+$callout-color-note: #526c80;
+$callout-color-tip: #536f56;
+$callout-color-important: #946f2b;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
 
 /*-- scss:rules --*/
+
+:root {
+  --workshop-rule: #d8d8d8;
+  --workshop-muted: #626262;
+  --workshop-ink: #181818;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--workshop-rule);
+  padding-block: 0.8rem;
+}
+
+.navbar-title {
+  font-family: $font-family-sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+#quarto-sidebar .sidebar-item-text {
+  padding: 0.45rem 0.7rem;
+  border-radius: 0;
+}
+
+#quarto-sidebar .sidebar-item-text.active {
+  background: #f2f2f2;
+  font-weight: 600;
+  box-shadow: inset 2px 0 var(--workshop-ink);
+}
+
+#quarto-sidebar .sidebar-item-section > .sidebar-item-container {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.6rem;
+}
+
+#TOC {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+#title-block-header {
+  padding-block: 1.2rem 1.6rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--workshop-ink);
+}
+
+#title-block-header .title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  max-width: 25ch;
+}
+
+#title-block-header .subtitle {
+  margin-top: 1.2rem;
+  color: var(--workshop-muted);
+  font-family: $font-family-monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+main h2 {
+  margin-top: 3.6rem;
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: 1.65rem;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+main h3 {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+}
+
+main a:not(.btn, .anchorjs-link) {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--workshop-ink);
+  outline-offset: 3px;
+}
+
+main .callout {
+  border: 0;
+  border-left: 2px solid var(--workshop-rule);
+  border-radius: 0;
+  box-shadow: none;
+  margin-block: 1.8rem;
+}
+
+main .callout .callout-title-container {
+  font-family: $font-family-sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+main .callout.callout-tip {
+  background: #e8f0e4;
+  border-left-color: $callout-color-tip;
+}
+
+main .callout.callout-important {
+  background: #f7edd9;
+  border-left: 4px double $callout-color-important;
+}
+
+main .callout.callout-note {
+  background: #e6eef4;
+  border-left-color: $callout-color-note;
+}
+
+main .callout.callout-style-default > .callout-header {
+  background: transparent;
+}
+
+main .card.exercise-editor {
+  --exercise-main-bg: #fff;
+  --exercise-cap-bg: #f5f5f5;
+  --exercise-code-block-bg: #fff;
+  border: 1px solid var(--workshop-rule);
+  border-top: 2px solid var(--workshop-ink);
+  border-radius: 0;
+  margin-block: 1.5rem;
+  box-shadow: none;
+}
+
+main .card.exercise-editor .card-header {
+  padding: 0.45rem 0.6rem;
+  border-bottom-color: var(--workshop-rule);
+  border-radius: 0;
+}
+
+main .card.exercise-editor .card-header a.btn {
+  --bs-btn-font-size: 0.85rem;
+  --bs-btn-padding-x: 0.45rem;
+  --bs-btn-padding-y: 0.25rem;
+}
+
+main .webr-ojs-exercise.exercise-hint,
+main .webr-ojs-exercise.exercise-solution {
+  background: #fff;
+  border-radius: 0;
+}
+
+main .webr-ojs-exercise.exercise-solution .callout-body {
+  padding-block: 0.5rem;
+}
+
+main .webr-ojs-exercise.exercise-solution
+  .callout.callout-style-default .callout-body > .exercise-solution {
+  padding-block: 0;
+}
+
+// Observable applies important margins after the theme has loaded.
+main .exercise-solution .callout-body div.sourceCode {
+  margin-block: 0 !important;
+  background-color: var(--solution-code-bg, #ededed);
+  border-color: var(--solution-code-bg, #ededed);
+}
+
+main .exercise-solution .callout-tip {
+  --solution-code-bg: #dbe6d5;
+}
+
+main .exercise-solution .callout-note {
+  --solution-code-bg: #d8e4ed;
+}
+
+main .exercise-solution .callout-important {
+  --solution-code-bg: #ecdfc6;
+}
+
+main .cell-output-display,
+main .cell-output-pyodide {
+  background: #fff;
+  overflow-x: auto;
+}
+
+main .cell-output-display {
+  padding: 0.5rem;
+}
+
+main .cell-output-display img {
+  display: block;
+  margin-inline: auto;
+}
+
+// Keep generated table colours scoped to the data rather than the site theme.
+main table:not(.gt_table, .dataframe) {
+  background: #fff;
+  font-size: 0.95rem;
+}
+
+main table:not(.gt_table, .dataframe) > thead {
+  border-bottom: 2px solid var(--workshop-ink);
+}
+
+main table:not(.gt_table, .dataframe) > thead > tr > th {
+  padding-block: 0.8rem;
+  color: var(--workshop-ink);
+  font-weight: 600;
+}
+
+.workshop-intro {
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  margin-bottom: 2rem;
+}
+
+.workshop-route {
+  border-top: 2px solid var(--workshop-ink);
+  margin-block: 1.5rem;
+}
+
+.workshop-route > a {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  row-gap: 0.3rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--workshop-rule);
+  text-decoration: none;
+  color: $body-color;
+}
+
+.workshop-route > a:hover {
+  background: #f5f5f5;
+}
+
+.route-number {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  font-family: $font-family-monospace;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.06em;
+  color: var(--workshop-muted);
+}
+
+.route-tool {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  display: block;
+  font-family: $font-family-monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--workshop-muted);
+}
+
+.route-title {
+  grid-column: 2;
+  grid-row: 1;
+  display: block;
+  font-family: $headings-font-family;
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.route-description {
+  grid-column: 2;
+  grid-row: 2;
+  display: block;
+  color: var(--workshop-muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 575.98px) {
+  .workshop-route > a {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+  }
+
+  .route-tool {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .workshop-intro {
+    font-size: 1.3rem;
+  }
+
+  .navbar-title {
+    font-size: 1rem;
+  }
+
+  #title-block-header {
+    padding-top: 0.5rem;
+  }
+
+  // Keep the action label visible when the live runtime hides it on phones.
+  main .card-header .btn-exercise-editor > .btn-label-exercise-editor {
+    max-width: none;
+    margin-left: 0;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  main .exercise-editor,
+  main .exercise-hint,
+  main .exercise-solution,
+  main div.sourceCode {
+    margin-right: 0 !important;
+  }
+}
 
 // Give live code editors a bit of breathing room.
 .qwebr-editor {
