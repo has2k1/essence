@@ -10,13 +10,12 @@ project:
 website:
   title: "The Essence of Data Visualisation"
   description: "A PyCon Africa 2026 workshop on showing data clearly with plots and tables."
-  reader-mode: true
   page-navigation: true
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
   sidebar:
+    title: "The Essence of Data Visualisation"
+    style: docked
+    pinned: true
+    collapse-level: 2
     contents:
       - section: "Workshop"
         contents:
@@ -35,4 +34,7 @@ format:
     theme: theme.scss
     css: fonts/fraunces.css
     toc: true
-    toc-location: left
+    grid:
+      sidebar-width: 300px
+      body-width: 1000px
+      margin-width: 300px

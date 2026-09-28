@@ -14,7 +14,7 @@ $headings-font-weight: 500;
 $navbar-bg: #fff;
 $navbar-fg: #181818;
 $navbar-hl: #181818;
-$sidebar-bg: #fff;
+$sidebar-bg: #f3f3f3;
 $sidebar-fg: #626262;
 $sidebar-hl: #181818;
 $border-color: #d8d8d8;
@@ -60,7 +60,7 @@ body {
 }
 
 #quarto-sidebar .sidebar-item-text.active {
-  background: #f2f2f2;
+  background: #e4e4e4;
   font-weight: 600;
   box-shadow: inset 2px 0 var(--workshop-ink);
 }
@@ -76,6 +76,43 @@ body {
 #TOC {
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+#toc-title {
+  margin-bottom: 0.6rem;
+  font-family: $font-family-sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--workshop-ink);
+}
+
+#TOC ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#TOC ul ul {
+  padding-left: 0.9rem;
+}
+
+#TOC .nav-link {
+  padding: 0.3rem 0 0.3rem 0.8rem;
+  border-left: 1px solid var(--workshop-rule);
+  color: var(--workshop-muted);
+}
+
+#TOC .nav-link:hover {
+  color: var(--workshop-ink);
+  border-left-color: var(--workshop-muted);
+}
+
+#TOC .nav-link.active {
+  color: var(--workshop-ink);
+  font-weight: 600;
+  border-left: 2px solid var(--workshop-ink);
+  padding-left: calc(0.8rem - 1px);
 }
 
 #title-block-header {
@@ -349,19 +386,6 @@ main table:not(.gt_table, .dataframe) > thead > tr > th {
   }
 }
 
-@media print {
-  body {
-    background: #fff;
-  }
-
-  main .exercise-editor,
-  main .exercise-hint,
-  main .exercise-solution,
-  main div.sourceCode {
-    margin-right: 0 !important;
-  }
-}
-
 // Give live code editors a bit of breathing room.
 .qwebr-editor {
   margin-bottom: 1.5rem;
@@ -396,39 +420,4 @@ main .card.exercise-editor {
 
 main div.sourceCode pre code {
   font-size: var(--code-block-font-size);
-}
-
-// The TOC lives in the left sidebar, leaving the right margin empty. Let code
-// spill into it so long lines show without sideways scrolling, while prose
-// keeps its comfortable measure.
-@mixin code-breakout($width) {
-  main .exercise-editor,
-  main .exercise-hint,
-  main .exercise-solution,
-  main div.sourceCode {
-    margin-right: -$width;
-  }
-
-  // Already widened by their (possibly nested) hint/solution box.
-  main :is(.exercise-hint, .exercise-solution)
-    :is(.exercise-editor, .exercise-hint, .exercise-solution, div.sourceCode) {
-    margin-right: 0;
-  }
-
-  // A callout box clips its content, so code must stay inside it.
-  main .callout div.sourceCode {
-    margin-right: 0;
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  @include code-breakout(150px);
-}
-
-@include media-breakpoint-up(xl) {
-  @include code-breakout(225px);
-}
-
-@media (min-width: 1280px) {
-  @include code-breakout(250px);
 }
