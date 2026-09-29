@@ -1,6 +1,7 @@
 ---
 title: "The Essence of Data Visualisation"
 subtitle: "PyCon Africa 2026"
+author: "Hassan Kibirige"
 ---
 
 ::: {.workshop-intro}
