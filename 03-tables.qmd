@@ -66,6 +66,7 @@ contains a tribe's population in 2014 and 2024.
 
 ```{pyodide}
 #| exercise: tables_0
+#| caption: ""
 #| autorun: true
 #| edit: false
 import pandas as pd
@@ -176,6 +177,7 @@ up the table's headings and formatting.
 
 ```{pyodide}
 #| exercise: tables_1
+#| caption: ""
 GT(provisional)
 ```
 
@@ -183,12 +185,15 @@ Tell `GT()` which column holds the row labels:
 
 ```{pyodide}
 #| exercise: tables_2
+#| caption: ""
 GT(provisional, rowname_col="tribe")
 ```
 
 `rowname_col="tribe"` places tribe names in the row labels on the left.
 
+::: {.task}
 Add a title and subtitle with `tab_header()`:
+:::
 
 ```{pyodide}
 #| exercise: tables_3
@@ -221,9 +226,11 @@ Titles are text, so put them in quotes: `title="Population by tribe"`.
 :::
 :::
 
+::: {.task}
 Use `tab_spanner()` to put a shared heading above the population
 columns. Use `cols_label()` for their individual labels and
 `tab_source_note()` to credit the source:
+:::
 
 ```{pyodide}
 #| exercise: tables_4
@@ -318,9 +325,11 @@ labelled.loc[2, "population_2024"] = tag("D") + labelled.loc[2, "population_2024
 
 ## Number formatting and colour
 
+::: {.task}
 A growth column will make the change between censuses easier to compare.
 Divide the 2024 population by the 2014 population and subtract 1. For
 example, 0.25 means growth of 25%.
+:::
 
 ```{pyodide}
 #| exercise: growth_1
@@ -357,6 +366,7 @@ populations as whole numbers with commas and growth as a percentage:
 
 ```{pyodide}
 #| exercise: format_1
+#| caption: ""
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
@@ -377,6 +387,7 @@ those limits as `domain`:
 
 ```{pyodide}
 #| exercise: format_2
+#| caption: ""
 (
     GT(provisional, rowname_col="tribe")
     .tab_header(title="Population by tribe", subtitle="Uganda census, 2014 and 2024")
@@ -424,6 +435,7 @@ outside `domain` appear grey.
 
 ## The corrected table
 
+::: {.task}
 Build a table using `corrected`, which already includes growth. Make
 the figures easy to read and unusual growth easy to spot.
 
@@ -433,6 +445,7 @@ the figures easy to read and unusual growth easy to spot.
 - Format population and growth values for easy reading.
 - Colour the growth column as in the previous exercise.
 - Credit the source.
+:::
 
 ```{pyodide}
 #| exercise: rebuild_1

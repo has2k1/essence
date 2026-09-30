@@ -27,6 +27,7 @@ person is a measure of economic output per person.
 
 ```{pyodide}
 #| exercise: gap_0
+#| caption: ""
 #| autorun: true
 #| edit: false
 import pandas as pd
@@ -51,6 +52,7 @@ point for each row.
 
 ```{pyodide}
 #| exercise: gap_1
+#| caption: ""
 #| autorun: true
 (
     ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
@@ -74,6 +76,7 @@ We can also use colour to show which region each country belongs to:
 
 ```{pyodide}
 #| exercise: gap_2
+#| caption: ""
 (
     ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
     + geom_point(aes(color="region"))
@@ -87,6 +90,7 @@ Use population (`pop`) to control point size:
 
 ```{pyodide}
 #| exercise: gap_3
+#| caption: ""
 #| autorun: true
 (
     ggplot(africa_2007, aes(x="gdpPercap", y="lifeExp"))
@@ -94,8 +98,10 @@ Use population (`pop`) to control point size:
 )
 ```
 
+::: {.task}
 Now use colour to show life expectancy. Replace the blank with
 `"lifeExp"`:
+:::
 
 ```{pyodide}
 #| exercise: gap_4
@@ -143,6 +149,7 @@ Next, we'll look at life expectancy over time in East Africa:
 
 ```{pyodide}
 #| exercise: layers_0
+#| caption: ""
 #| autorun: true
 #| edit: false
 import pandas as pd
@@ -170,6 +177,7 @@ Let's draw a line through the points:
 
 ```{pyodide}
 #| exercise: layers_1
+#| caption: ""
 (
     ggplot(east_africa, aes(x="year", y="lifeExp"))
     + geom_line()
@@ -189,8 +197,10 @@ We haven't told plotnine which points belong together. It draws one line
 through all the countries, connecting points in order of year.
 :::
 
+::: {.task}
 Use `group` to draw a line for each country. Then add points coloured
 by country.
+:::
 
 ```{pyodide}
 #| exercise: layers_2
@@ -233,8 +243,10 @@ rises again.
 
 ## Put it in order
 
+::: {.task}
 Rearrange the code to reproduce the plot below. Remove the line you
 don't need. You can cut and paste within the editor.
+:::
 
 ```{python}
 #| echo: false
@@ -294,8 +306,11 @@ The example has one panel.
 
 Putting every country in one plot makes the lines hard to follow.
 `facet_wrap()` gives each region its own panel. These separate views are
-called *facets*. Remove `+ facet_wrap("region")` to see all the lines
-together.
+called *facets*.
+
+::: {.task}
+Remove `+ facet_wrap("region")` to see all the lines together.
+:::
 
 ```{pyodide}
 #| exercise: facet_1
@@ -339,6 +354,7 @@ corrected final report).
 
 ```{pyodide}
 #| exercise: census_0
+#| caption: ""
 #| autorun: true
 #| edit: false
 import pandas as pd
@@ -390,8 +406,10 @@ provisional = census[census.version == "bad"]
 
 ### Points and lines
 
+::: {.task}
 Use `population` for horizontal position, `tribe` for vertical position
 and `year` for colour. Group by tribe to join its two points with a line.
+:::
 
 ```{pyodide}
 #| exercise: census_1
@@ -447,8 +465,10 @@ These four tribes had their 2014 figures swapped with each other.
 
 ### The corrected figures
 
+::: {.task}
 Now plot both versions side by side. `census` holds the `bad` and `good`
 rows; split them into panels with `facet_wrap()`.
+:::
 
 ```{pyodide}
 #| exercise: census_2
@@ -496,6 +516,7 @@ point and edit it as you like.
 
 ```{pyodide}
 #| exercise: census_3
+#| caption: ""
 small_tribes = ["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"]
 small = census.query("tribe in @small_tribes")
 
@@ -568,6 +589,7 @@ middle growth value when the tribes are sorted.
 
 ```{pyodide}
 #| exercise: alt_bars
+#| caption: ""
 provisional = wide[wide.version == "bad"].sort_values("growth")
 provisional = provisional.assign(
     tribe=pd.Categorical(provisional.tribe.astype(str), categories=provisional.tribe.astype(str))
@@ -592,6 +614,7 @@ whose growth is far from the median.
 
 ```{pyodide}
 #| exercise: alt_box
+#| caption: ""
 outliers = wide[wide.vs_typical.abs() > 15]
 
 (
@@ -610,6 +633,7 @@ let you compare the provisional and corrected figures.
 
 ```{pyodide}
 #| exercise: alt_lollipop
+#| caption: ""
 (
     ggplot(wide, aes(x="growth", y="tribe"))
     + geom_segment(aes(x=0, xend="growth", yend="tribe"), color="grey")
@@ -628,6 +652,7 @@ compare growth across tribes of different sizes.
 
 ```{pyodide}
 #| exercise: alt_index
+#| caption: ""
 provisional = wide[wide.version == "bad"]
 index = provisional.melt(
     id_vars=["tribe", "growth", "vs_typical"],

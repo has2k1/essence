@@ -199,6 +199,33 @@ main .callout.callout-style-default > .callout-header {
   background: transparent;
 }
 
+// A task: something the reader must fill in or write, as
+// opposed to code they only run.
+main .task {
+  margin-block: 2rem 1.5rem;
+  padding: 0.7rem 1rem;
+  border-left: 4px solid var(--workshop-ink);
+  background: #fff;
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 1.05rem;
+}
+
+main .task::before {
+  content: "Task";
+  display: block;
+  margin-bottom: 0.15rem;
+  font-family: $font-family-sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--workshop-muted);
+}
+
+main .task > :last-child {
+  margin-bottom: 0;
+}
+
 main .card.exercise-editor {
   --exercise-main-bg: #fff;
   --exercise-cap-bg: #f5f5f5;
@@ -214,6 +241,11 @@ main .card.exercise-editor .card-header {
   padding: 0.45rem 0.6rem;
   border-bottom-color: var(--workshop-rule);
   border-radius: 0;
+}
+
+// `caption: ""` still creates a caption div, and its flex gap adds space. Hide it.
+main .card.exercise-editor .card-header > div > div:empty {
+  display: none;
 }
 
 main .card.exercise-editor .card-header a.btn {

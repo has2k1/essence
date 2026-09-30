@@ -81,6 +81,7 @@ GT(afro)
 `peak_listeners_m` gives each artist's highest recorded monthly listener
 count. Both columns are in millions.
 
+::: {.task}
 Work in pairs for a few minutes. Pick one question:
 
 A. **How far is each artist from their peak?**
@@ -94,6 +95,7 @@ Prepare your design:
 3. Sketch your design on paper or try it in the code below.
 
 We'll ask a few pairs to share their design and explain their choices.
+:::
 
 ```{pyodide}
 #| setup: true
