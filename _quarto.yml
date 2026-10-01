@@ -4,6 +4,7 @@ project:
   resources:
     - data/
     - fonts/
+    - scripts/data-preview.js
   post-render:
     - scripts/copy-wheels.py
 
@@ -33,6 +34,8 @@ format:
   live-html:
     theme: theme.scss
     css: fonts/fraunces.css
+    include-after-body:
+      - text: '<script src="scripts/data-preview.js"></script>'
     toc: true
     grid:
       sidebar-width: 300px

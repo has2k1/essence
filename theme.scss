@@ -453,3 +453,44 @@ main .card.exercise-editor {
 main div.sourceCode pre code {
   font-size: var(--code-block-font-size);
 }
+
+// "Show data" panel: floats over the right of the code in a live editor and overflows the box
+// rather than scrolling or growing it.
+.exercise-editor-body {
+  position: relative;
+}
+
+.data-preview {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border-bottom: 1px solid var(--workshop-rule);
+  border-left: 1px solid var(--workshop-rule);
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.08);
+  font-size: 0.8rem;
+
+  .data-preview-shape {
+    margin: 0 0 0.25rem;
+    color: var(--workshop-muted);
+
+    code {
+      color: var(--workshop-ink);
+      font-weight: 600;
+    }
+  }
+
+  table {
+    margin: 0;
+    width: auto;
+  }
+
+  th,
+  td {
+    padding: 0.1rem 0.5rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+}

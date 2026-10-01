@@ -30,6 +30,7 @@ person is a measure of economic output per person.
 #| caption: ""
 #| autorun: true
 #| edit: false
+#| preview: africa_2007
 import pandas as pd
 from plotnine import *
 
@@ -152,6 +153,7 @@ Next, we'll look at life expectancy over time in East Africa:
 #| caption: ""
 #| autorun: true
 #| edit: false
+#| preview: east_africa
 import pandas as pd
 from plotnine import *
 
@@ -267,6 +269,7 @@ east_africa = africa_history[
 
 ```{pyodide}
 #| exercise: parsons
+#| preview: false
     + facet_wrap("region")
     + labs(x="", y="Life expectancy (years)", color="Country")
     + geom_point(aes(color="country"))
@@ -357,6 +360,7 @@ corrected final report).
 #| caption: ""
 #| autorun: true
 #| edit: false
+#| preview: provisional
 import pandas as pd
 from plotnine import *
 
