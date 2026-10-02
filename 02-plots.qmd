@@ -594,19 +594,16 @@ middle growth value when the tribes are sorted.
 ```{pyodide}
 #| exercise: alt_bars
 #| caption: ""
-provisional = wide[wide.version == "bad"].sort_values("growth")
-provisional = provisional.assign(
-    tribe=pd.Categorical(provisional.tribe.astype(str), categories=provisional.tribe.astype(str))
-)
+provisional = wide[wide.version == "bad"]
 median_growth = provisional.growth.median()
 
 (
-    ggplot(provisional, aes(x="tribe", y="growth"))
+    ggplot(provisional, aes(x="reorder(tribe, growth)", y="growth"))
     + geom_col()
     + annotate("hline", yintercept=median_growth, linetype="dashed")
     + annotate("text", label="median", x=1, y=median_growth, ha="left")
     + coord_flip()
-    + labs(y="Growth, 2014 to 2024 (%)")
+    + labs(x="Tribe", y="Growth, 2014 to 2024 (%)")
 )
 ```
 
