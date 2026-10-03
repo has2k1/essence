@@ -35,6 +35,7 @@ $border-radius-lg: 0;
   --workshop-rule: #d8d8d8;
   --workshop-muted: #626262;
   --workshop-ink: #181818;
+  --workshop-task: #6b3fa0;
 }
 
 body {
@@ -204,8 +205,8 @@ main .callout.callout-style-default > .callout-header {
 main .task {
   margin-block: 2rem 1.5rem;
   padding: 0.7rem 1rem;
-  border-left: 4px solid var(--workshop-ink);
-  background: #fff;
+  border-top: 4px solid var(--workshop-task);
+  background: color-mix(in srgb, var(--workshop-task) 10%, transparent);
   font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   font-size: 1.05rem;
 }
@@ -219,7 +220,7 @@ main .task::before {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--workshop-muted);
+  color: color-mix(in srgb, var(--workshop-task) 85%, black);
 }
 
 main .task > :last-child {
