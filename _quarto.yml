@@ -34,6 +34,8 @@ format:
   live-html:
     theme: theme.scss
     css: fonts/fraunces.css
+    include-in-header:
+      - text: '<script>history.scrollRestoration = "manual";</script>'
     include-after-body:
       - text: '<script src="scripts/data-preview.js"></script>'
     toc: true
