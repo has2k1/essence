@@ -4,6 +4,7 @@ project:
   resources:
     - data/
     - fonts/
+    - images/
     - scripts/data-preview.js
   post-render:
     - scripts/copy-wheels.py

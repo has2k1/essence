@@ -5,8 +5,8 @@ author: "Hassan Kibirige"
 ---
 
 ::: {.workshop-intro}
-A plot uses position, size or colour to show data. A table uses text,
-layout and formatting. In both, we choose how a value appears on the page.
+A plot (typical) uses position, size or colour to show data. A table (typical) uses text,
+layout, colour and formatting. In both, we choose how a value appears on the page.
 We call this a *mapping*.
 :::
 
@@ -35,12 +35,14 @@ By the end, you should be able to:
     <span class="route-number"><span class="visually-hidden">Part </span>02</span>
     <span class="route-title">Plots</span>
     <span class="route-description">Build and compare plots</span>
+    <img class="route-logo" src="images/plotnine-hex.png" alt="">
     <span class="route-tool">plotnine</span>
   </a>
   <a href="03-tables.qmd">
     <span class="route-number"><span class="visually-hidden">Part </span>03</span>
     <span class="route-title">Tables</span>
     <span class="route-description">Build and format tables</span>
+    <img class="route-logo" src="images/great-tables-hex.png" alt="">
     <span class="route-tool">great-tables</span>
   </a>
   <a href="04-closing.qmd">
@@ -60,9 +62,4 @@ The workshop runs in your browser. You don't need to install anything.
 Python can take a minute to load when you first open a page. Open the
 workshop pages now so they're ready when we reach them.
 
-You can edit and run the exercise code on each page. If you'd prefer to
-work on your own machine, install the packages with:
-
-```bash
-uv add plotnine great-tables pandas
-```
+You can edit and run the exercise code on each page.
