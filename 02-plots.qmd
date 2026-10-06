@@ -380,7 +380,7 @@ census["year"] = census.year.astype(str)
 # Leave out "Other tribes" so the smaller populations are easier to compare
 census = census[census.tribe != "Other tribes"]
 
-provisional = census[census.version == "bad"]
+provisional = census.query("version == 'bad'")
 provisional.head()
 ```
 
@@ -405,7 +405,7 @@ tribe_order = (
 census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
 census["year"] = census.year.astype(str)
 census = census[census.tribe != "Other tribes"]
-provisional = census[census.version == "bad"]
+provisional = census.query("version == 'bad'")
 ```
 
 ### Points and lines
@@ -514,21 +514,20 @@ In the corrected figures every tribe grows, and by similar proportions.
 
 ### A closer look (optional)
 
-If time allows, compare the smaller tribes in the two panels. Can you
-find any other figures that changed? Use the plot below as a starting
-point and edit it as you like.
+If time allows, compare the smaller tribes' 2014 figures in the
+provisional and corrected reports. Each line joins the two figures for one
+tribe. Can you find any other figures that changed? Use the plot below as a
+starting point and edit it as you like.
 
 ```{pyodide}
 #| exercise: census_3
 #| caption: ""
-small_tribes = ["Lugbara", "Banyoro", "Alur", "Bakonzo", "Batoro", "Bafumbira"]
-small = census.query("tribe in @small_tribes")
+small = census.query("year == '2014' and population < 1.2e6")
 
 (
     ggplot(small, aes(x="population", y="tribe"))
     + geom_line(aes(group="tribe"), color="grey")
-    + geom_point(aes(color="year"), size=3)
-    + facet_wrap("version")
+    + geom_point(aes(color="version"), size=3)
     + scale_x_continuous(labels=lambda s: [f"{x/1e6:.1f}M" for x in s])
 )
 ```
@@ -571,19 +570,47 @@ tribe_order = (
 )
 census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
 
-# One row per tribe and version, with the growth between the two censuses
-wide = census.pivot_table(
-    index=["tribe", "version"],
-    columns="year",
-    values="population",
-    observed=True,
-).reset_index()
-wide.columns = ["tribe", "version", "pop_2014", "pop_2024"]
-wide["growth"] = (wide.pop_2024 / wide.pop_2014 - 1) * 100
+# Compare each census with the tribe's first (2014) and last (2024) population
+census = census.sort_values("year")
+population = census.groupby(["tribe", "version"], observed=True).population
+first, last = population.transform("first"), population.transform("last")
+census["growth_factor"] = census.population / first  # 2014 = 1
+census["growth_pct"] = (last / first - 1) * 100
 
-# Compare each tribe with the median growth in its own report
-wide["vs_typical"] = wide.growth - wide.groupby("version").growth.transform("median")
+# One row per tribe and version, for the growth charts
+census_2024 = census[census.year == 2024]
 ```
+
+::: {.callout-note collapse="true"}
+## Setup code
+
+Each example below starts from this code, which adds two columns to the
+census data. 
+
+1. `growth_factor` is the population as a multiple of the tribe's 2014 population.
+2. `growth_pct` is the growth between the two censuses as a percentage.
+
+```python
+census = pd.read_csv("data/census_long.csv")
+census = census[census.tribe != "Other tribes"]
+tribe_order = (
+    census.query("version == 'good' and year == 2024")
+    .sort_values("population")
+    .tribe
+)
+census["tribe"] = pd.Categorical(census.tribe, categories=tribe_order)
+
+# Compare each census with the tribe's first (2014) and last (2024) population
+census = census.sort_values("year")
+population = census.groupby(["tribe", "version"], observed=True).population
+first, last = population.transform("first"), population.transform("last")
+census["growth_factor"] = census.population / first  # 2014 = 1
+census["growth_pct"] = (last / first - 1) * 100
+
+# One row per tribe and version, for the growth charts
+census_2024 = census[census.year == 2024]
+```
+:::
 
 ### Bar chart of growth
 
@@ -594,11 +621,11 @@ middle growth value when the tribes are sorted.
 ```{pyodide}
 #| exercise: alt_bars
 #| caption: ""
-provisional = wide[wide.version == "bad"]
-median_growth = provisional.growth.median()
+provisional = census_2024.query("version == 'bad'")
+median_growth = provisional.growth_pct.median()
 
 (
-    ggplot(provisional, aes(x="reorder(tribe, growth)", y="growth"))
+    ggplot(provisional, aes(x="reorder(tribe, growth_pct)", y="growth_pct"))
     + geom_col()
     + annotate("hline", yintercept=median_growth, linetype="dashed")
     + annotate("text", label="median", x=1, y=median_growth, ha="left")
@@ -616,10 +643,10 @@ whose growth is far from the median.
 ```{pyodide}
 #| exercise: alt_box
 #| caption: ""
-outliers = wide[wide.vs_typical.abs() > 15]
+outliers = census_2024.query("growth_pct < 0 or growth_pct > 60")
 
 (
-    ggplot(wide, aes(x="version", y="growth"))
+    ggplot(census_2024, aes(x="version", y="growth_pct"))
     + geom_boxplot(outlier_alpha=0)
     + geom_point()
     + geom_text(aes(label="tribe"), data=outliers, ha="left", nudge_x=0.08, size=8)
@@ -636,8 +663,8 @@ let you compare the provisional and corrected figures.
 #| exercise: alt_lollipop
 #| caption: ""
 (
-    ggplot(wide, aes(x="growth", y="tribe"))
-    + geom_segment(aes(x=0, xend="growth", yend="tribe"), color="grey")
+    ggplot(census_2024, aes(x="growth_pct", y="tribe"))
+    + geom_segment(aes(x=0, xend="growth_pct", yend="tribe"), color="grey")
     + geom_point()
     + facet_wrap("version")
     + labs(x="Growth, 2014 to 2024 (%)")
@@ -654,33 +681,18 @@ compare growth across tribes of different sizes.
 ```{pyodide}
 #| exercise: alt_index
 #| caption: ""
-provisional = wide[wide.version == "bad"]
-index = provisional.melt(
-    id_vars=["tribe", "growth", "vs_typical"],
-    value_vars=["pop_2014", "pop_2024"],
-    var_name="year",
-    value_name="population",
-).assign(
-    year=lambda d: d.year.str[-4:],
-    population=lambda d: d.population / d.groupby("tribe").population.transform("first"),
-    shrank=lambda d: d.growth < 0,
-)
+provisional = census.query("version == 'bad'")
+labelled = provisional.query("year == 2024 and (growth_pct < 0 or growth_pct > 60)")
 
 (
-    ggplot(index, aes(x="year", y="population", group="tribe", color="shrank"))
+    ggplot(provisional, aes(x="year", y="growth_factor", group="tribe", color="growth_pct < 0"))
     + geom_line()
     + geom_point()
-    + geom_text(
-        aes(label="tribe"),
-        data=index[(index.year == "2024") & (index.vs_typical.abs() > 15)],
-        ha="left",
-        nudge_x=0.05,
-        size=8,
-    )
+    + geom_text(aes(label="tribe"), data=labelled, ha="left", nudge_x=0.3, size=8)
     + annotate("hline", yintercept=1)
     + annotate("text", label="No Growth", x=float("inf"), y=1, va="bottom", ha="right", size=8)
-    + scale_x_discrete(expand=(0.05, 0, 0.4, 0))
-    + labs(y="Population (2014 = 1)")
+    + scale_x_continuous(breaks=[2014, 2024], expand=(0.05, 0, 0.3, 0))
+    + labs(x="Year", y="Growth factor (2014 = 1)")
     + theme(legend_position="none")
 )
 ```
