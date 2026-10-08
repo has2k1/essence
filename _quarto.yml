@@ -6,8 +6,6 @@ project:
     - fonts/
     - images/
     - scripts/data-preview.js
-  post-render:
-    - scripts/copy-wheels.py
 
 website:
   title: "The Essence of Data Visualisation"

@@ -2,10 +2,6 @@
 title: "3. Tables with great-tables"
 pyodide:
   packages:
-    # multimark isn't on PyPI for Pyodide, so install the local wheel before
-    # great-tables asks for it. scripts/copy-wheels.py puts wheels/ next to
-    # the Pyodide worker, which is what this relative URL resolves against.
-    - wheels/multimark-0.3.2-cp39-abi3-pyemscripten_2026_0_wasm32.whl
     - great-tables==1.0.0
     - pandas
   resources:
